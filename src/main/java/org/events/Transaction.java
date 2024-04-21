@@ -3,13 +3,18 @@ package org.events;
 import org.actors.Wallet;
 
 import java.nio.charset.StandardCharsets;
-import java.security.*;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class Transaction {
-    Wallet from;
-    Wallet to;
-    float amount;
-    byte[] signture;
+    private final Wallet to;
+    private final float amount;
+    private final byte[] signture;
+    private final Wallet from;
 
     public Transaction(Wallet from, Wallet to, float amount, byte[] signature) throws InvalidKeyException, NoSuchAlgorithmException, SignatureException {
         Signature verifier = Signature.getInstance("SHA256withRSA");
@@ -24,5 +29,35 @@ public class Transaction {
         this.to = to;
         this.amount = amount;
         this.signture = signature;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Transaction that)) return false;
+        return Float.compare(getAmount(), that.getAmount()) == 0 && Objects.equals(getTo(), that.getTo()) && Arrays.equals(getSignture(), that.getSignture()) && Objects.equals(getFrom(), that.getFrom());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(getTo(), getAmount(), getFrom());
+        result = 31 * result + Arrays.hashCode(getSignture());
+        return result;
+    }
+
+    public Wallet getFrom() {
+        return from;
+    }
+
+    public Wallet getTo() {
+        return to;
+    }
+
+    public float getAmount() {
+        return amount;
+    }
+
+    public byte[] getSignture() {
+        return signture;
     }
 }
