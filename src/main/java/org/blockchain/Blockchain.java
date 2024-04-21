@@ -1,11 +1,10 @@
 package org.blockchain;
 
+import org.actors.Wallet;
+import org.events.Creation;
 import org.events.Event;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Objects;
+import java.util.*;
 import java.util.random.RandomGenerator;
 
 public class Blockchain {
@@ -81,9 +80,26 @@ public class Blockchain {
         if (!block.verify() || block.getEvents().size() > getMax_block_events()) {
             return false;
         }
+        blocks.add(block);
         setUpdated(new Date());
         RandomGenerator generator = RandomGenerator.getDefault();
         next_zeros = generator.nextInt(2, 6);
         return true;
+    }
+
+    public static Set<Wallet> activeBlockchainWallets(Blockchain blockchain) {
+        Set<Wallet> wallets = new HashSet<>();
+        for (Block block : blockchain.getBlocks()) {
+            for (Event e : block.getEvents()) {
+                if (e instanceof Creation) {
+                    wallets.add(((Creation) e).getCreated());
+                }
+            }
+        }
+        return wallets;
+    }
+
+    public Set<Wallet> activeWallets() {
+        return activeBlockchainWallets(this);
     }
 }
