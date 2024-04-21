@@ -23,10 +23,11 @@ public class Wallet {
     }
 
     public Transaction createTransaction(Wallet to, float amount) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        byte[] message = Float.toString(amount).getBytes(StandardCharsets.UTF_8);
+        String message = Float.toString(amount) + to.getPublicKey();
+        byte[] bytes = message.getBytes(StandardCharsets.UTF_8);
         Signature signature = Signature.getInstance("SHA256withRSA");
         signature.initSign(privateKey);
-        signature.update(message);
+        signature.update(bytes);
         byte[] digitalSignature = signature.sign();
 
         return new Transaction(this, to, amount, digitalSignature);

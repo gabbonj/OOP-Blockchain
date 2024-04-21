@@ -17,11 +17,7 @@ public class Transaction {
     private final Wallet from;
 
     public Transaction(Wallet from, Wallet to, float amount, byte[] signature) throws InvalidKeyException, NoSuchAlgorithmException, SignatureException {
-        Signature verifier = Signature.getInstance("SHA256withRSA");
-        verifier.initVerify(from.getPublicKey());
-        verifier.update(Float.toString(amount).getBytes(StandardCharsets.UTF_8));
-
-        if (!verifier.verify(signature)) {
+        if (!verifyTransaction(from, to, amount, signature)) {
             throw new SignatureException("Invalid Signature");
         }
 
@@ -59,5 +55,14 @@ public class Transaction {
 
     public byte[] getSignture() {
         return signture;
+    }
+
+    public static boolean verifyTransaction(Wallet from, Wallet to, float amount, byte[] signature) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        Signature verifier = Signature.getInstance("SHA256withRSA");
+        verifier.initVerify(from.getPublicKey());
+        String message = Float.toString(amount) + to.getPublicKey();
+        verifier.update(message.getBytes(StandardCharsets.UTF_8));
+
+        return verifier.verify(signature);
     }
 }
