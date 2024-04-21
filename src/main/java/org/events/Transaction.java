@@ -8,15 +8,17 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Objects;
 
-public class Transaction {
+public class Transaction extends Event {
     private final Wallet to;
     private final float amount;
     private final byte[] signture;
     private final Wallet from;
 
-    public Transaction(Wallet from, Wallet to, float amount, byte[] signature) throws InvalidKeyException, NoSuchAlgorithmException, SignatureException {
+    public Transaction(Date date, Wallet from, Wallet to, float amount, byte[] signature) throws InvalidKeyException, NoSuchAlgorithmException, SignatureException {
+        super(date);
         if (!verifyTransaction(from, to, amount, signature)) {
             throw new SignatureException("Invalid Signature");
         }
@@ -64,5 +66,9 @@ public class Transaction {
         verifier.update(message.getBytes(StandardCharsets.UTF_8));
 
         return verifier.verify(signature);
+    }
+
+    public boolean verify() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        return verifyTransaction(from, to, amount, signture);
     }
 }

@@ -1,9 +1,12 @@
 package org.actors;
 
+import org.events.Event;
 import org.events.Transaction;
 
 import java.nio.charset.StandardCharsets;
 import java.security.*;
+import java.util.Date;
+import java.util.Objects;
 
 public class Wallet {
     private final PrivateKey privateKey;
@@ -18,6 +21,18 @@ public class Wallet {
         publicKey = pair.getPublic();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Wallet wallet)) return false;
+        return Objects.equals(privateKey, wallet.privateKey) && Objects.equals(getPublicKey(), wallet.getPublicKey());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(privateKey, getPublicKey());
+    }
+
     public PublicKey getPublicKey() {
         return publicKey;
     }
@@ -30,6 +45,7 @@ public class Wallet {
         signature.update(bytes);
         byte[] digitalSignature = signature.sign();
 
-        return new Transaction(this, to, amount, digitalSignature);
+        Date d = new Date();
+        return new Transaction(d, this, to, amount, digitalSignature);
     }
 }
