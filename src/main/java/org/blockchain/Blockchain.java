@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.Objects;
 import java.util.random.RandomGenerator;
 
-public class Blockchian {
+public class Blockchain {
     private final int max_tokens = 1000000;
     private final int max_block_events = 15;
     int next_zeros;
@@ -16,7 +16,7 @@ public class Blockchian {
     private final ArrayList<Event> pending;
     private Date updated;
 
-    public Blockchian() {
+    public Blockchain() {
         RandomGenerator generator = RandomGenerator.getDefault();
         next_zeros = generator.nextInt(2, 6);
         blocks = new LinkedList<Block>();
@@ -24,8 +24,8 @@ public class Blockchian {
         updated = new Date();
     }
 
-    public static boolean verifyBlockchain(Blockchian blockchian) {
-        for (Block b : blockchian.getBlocks()) {
+    public static boolean verifyBlockchain(Blockchain blockchain) {
+        for (Block b : blockchain.getBlocks()) {
             if (!b.verify()) {
                 return false;
             }
@@ -68,7 +68,7 @@ public class Blockchian {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Blockchian that)) return false;
+        if (!(o instanceof Blockchain that)) return false;
         return getMax_tokens() == that.getMax_tokens() && getMax_block_events() == that.getMax_block_events() && getNext_zeros() == that.getNext_zeros() && Objects.equals(getBlocks(), that.getBlocks()) && Objects.equals(getPending(), that.getPending()) && Objects.equals(getUpdated(), that.getUpdated());
     }
 

@@ -8,27 +8,27 @@ import java.security.SignatureException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BlockchianTest {
+public class BlockchainTest {
     @Test
     public void creation() {
-        Blockchian blockchian = null;
-        blockchian = new Blockchian();
-        assertNotNull(blockchian);
+        Blockchain blockchain = null;
+        blockchain = new Blockchain();
+        assertNotNull(blockchain);
     }
 
     @Test
     public void addBlock() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
-        Blockchian blockchian = null;
-        blockchian = new Blockchian();
-        assertNotNull(blockchian);
+        Blockchain blockchain = null;
+        blockchain = new Blockchain();
+        assertNotNull(blockchain);
 
-        Block block = BlockTest.createBlock(0, blockchian.getNext_zeros());
+        Block block = BlockTest.createBlock(0, blockchain.getNext_zeros());
         assertNotNull(block);
         assertFalse(block.verify());
-        assertFalse(blockchian.addBlock(block));
+        assertFalse(blockchain.addBlock(block));
         while (!block.verify()) {
             block.setNonce(block.getNonce() + 1);
         }
-        assertTrue(blockchian.addBlock(block));
+        assertTrue(blockchain.addBlock(block));
     }
 }
