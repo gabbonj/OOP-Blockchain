@@ -1,11 +1,13 @@
 package org.actors;
 
+import org.blockchain.Block;
 import org.blockchain.Blockchain;
 import org.events.Event;
 import org.events.Transaction;
 
 import java.nio.charset.StandardCharsets;
 import java.security.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
@@ -62,5 +64,22 @@ public class Wallet {
         byte[] digitalSignature = signature.sign();
 
         return new Transaction(this, to, amount, digitalSignature);
+    }
+
+    public Block mine() {
+        ArrayList<Event> pending = personalBlockchain.getPending();
+        ArrayList<Event> content = new ArrayList<>(){};
+        for (int i = 0; i < Math.min(pending.size(), personalBlockchain.getMax_block_events()); i++) {
+            content.add(pending.get(i));
+        }
+
+        Block block = new Block(0, personalBlockchain.getNext_zeros(), content, this);
+        if (!block.verifyTransactions()) {
+            throw new RuntimeException("Invalid transaction inside the pending events");
+        }
+        while (!block.verifyHash()) {
+            block.setNonce(block.getNonce() + 1);
+        }
+        return block;
     }
 }

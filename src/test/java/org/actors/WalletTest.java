@@ -1,9 +1,12 @@
 package org.actors;
 
+import org.events.Creation;
 import org.events.Transaction;
 import org.junit.Test;
 
 import java.security.*;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -50,5 +53,25 @@ public class WalletTest {
         assertNotNull(w);
         Core core = CoreTest.creteCore();
         w.pullFromCore(core);
+    }
+
+    @Test
+    public void mine() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        Wallet w = null;
+        try {
+            w = new Wallet();
+        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
+            throw new RuntimeException(e);
+        }
+        assertNotNull(w);
+        Core core = CoreTest.creteCore();
+        w.pullFromCore(core);
+
+        Set<Wallet> wallets = core.getWallets();
+        Creation c = new Creation(w);
+        assertTrue(core.addPending(c));
+        assertTrue(core.addPending(w.createTransaction(wallets.iterator().next(), 10)));
+
+        assertTrue(w.mine().verify());
     }
 }

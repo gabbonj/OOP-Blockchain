@@ -114,6 +114,7 @@ public class Blockchain {
                return false;
             }
         }
+        setUpdated(new Date());
         getPending().add(event);
         return true;
     }
