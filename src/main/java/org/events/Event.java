@@ -3,9 +3,9 @@ package org.events;
 import java.util.Date;
 
 public class Event {
-    Date Date;
+    private Date date;
 
-    public Event(java.util.Date date) {
-        Date = date;
+    public Event() {
+        date = new Date();
     }
 }

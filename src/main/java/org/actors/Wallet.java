@@ -45,7 +45,6 @@ public class Wallet {
         signature.update(bytes);
         byte[] digitalSignature = signature.sign();
 
-        Date d = new Date();
-        return new Transaction(d, this, to, amount, digitalSignature);
+        return new Transaction(this, to, amount, digitalSignature);
     }
 }

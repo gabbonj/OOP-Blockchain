@@ -17,8 +17,8 @@ public class Transaction extends Event {
     private final byte[] signture;
     private final Wallet from;
 
-    public Transaction(Date date, Wallet from, Wallet to, float amount, byte[] signature) throws InvalidKeyException, NoSuchAlgorithmException, SignatureException {
-        super(date);
+    public Transaction(Wallet from, Wallet to, float amount, byte[] signature) throws InvalidKeyException, NoSuchAlgorithmException, SignatureException {
+        super();
         if (!verifyTransaction(from, to, amount, signature)) {
             throw new SignatureException("Invalid Signature");
         }
