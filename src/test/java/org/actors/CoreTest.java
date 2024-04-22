@@ -4,6 +4,7 @@ import org.blockchain.Block;
 import org.blockchain.Blockchain;
 import org.blockchain.BlockchainTest;
 import org.events.Creation;
+import org.events.CreationTest;
 import org.events.Event;
 import org.junit.jupiter.api.Test;
 
@@ -23,6 +24,17 @@ class CoreTest {
         Core core = null;
         core = new Core(blockchain);
         assertNotNull(core);
+        return core;
+    }
+
+    public static Core creteCoreUpdated() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        Blockchain blockchain = BlockchainTest.createBlockChain();
+        Core core = null;
+        core = new Core(blockchain);
+        assertNotNull(core);
+        for (Wallet wallet : core.getWallets()) {
+            wallet.pullFromCore(core);
+        }
         return core;
     }
 
@@ -84,5 +96,13 @@ class CoreTest {
             assertInstanceOf(Creation.class, lastEvent);
             assertEquals(w, ((Creation)lastEvent).getCreated());
         }
+    }
+
+    @Test
+    public void checkTrust() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        Core core = CoreTest.creteCoreUpdated();
+        assertTrue(core.checkTrust());
+        Core wrongCore = CoreTest.creteCore();
+        assertFalse(wrongCore.checkTrust());
     }
 }

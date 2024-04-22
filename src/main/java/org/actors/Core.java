@@ -43,4 +43,15 @@ public class Core {
             wallet.getPersonalBlockchain().addBlock(block);
         }
     }
+
+    public boolean checkTrust() {
+        updateWallets();
+        int trust = 0;
+        for (Wallet wallet : wallets) {
+            if (wallet.getPersonalBlockchain().getBlocks().equals(getBlockchain().getBlocks())) {
+                trust++;
+            }
+        }
+        return trust > (getWallets().size() / 2);
+    }
 }
