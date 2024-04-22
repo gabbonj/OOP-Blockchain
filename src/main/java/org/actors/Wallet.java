@@ -1,5 +1,6 @@
 package org.actors;
 
+import org.blockchain.Blockchain;
 import org.events.Event;
 import org.events.Transaction;
 
@@ -7,10 +8,12 @@ import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Optional;
 
 public class Wallet {
     private final PrivateKey privateKey;
     private final PublicKey publicKey;
+    private Blockchain personalBlockchain;
 
     public Wallet() throws NoSuchAlgorithmException, NoSuchProviderException {
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA", "SunRsaSign");
@@ -19,6 +22,19 @@ public class Wallet {
         KeyPair pair = keyGen.generateKeyPair();
         privateKey = pair.getPrivate();
         publicKey = pair.getPublic();
+        personalBlockchain = new Blockchain();
+    }
+
+    public Blockchain getPersonalBlockchain() {
+        return personalBlockchain;
+    }
+
+    private void setPersonalBlockchain(Blockchain personalBlockchain) {
+        this.personalBlockchain = personalBlockchain;
+    }
+
+    public void pullFromCore(Core core) {
+        setPersonalBlockchain(core.getBlockchain());
     }
 
     @Override

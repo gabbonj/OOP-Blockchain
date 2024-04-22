@@ -38,4 +38,17 @@ public class WalletTest {
         }
         System.out.println("Transaction created successfully");
     }
+
+    @Test
+    public void pullFromCore() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        Wallet w = null;
+        try {
+            w = new Wallet();
+        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
+            throw new RuntimeException(e);
+        }
+        assertNotNull(w);
+        Core core = CoreTest.creteCore();
+        w.pullFromCore(core);
+    }
 }
