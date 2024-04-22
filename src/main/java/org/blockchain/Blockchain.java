@@ -3,8 +3,13 @@ package org.blockchain;
 import org.actors.Wallet;
 import org.events.Creation;
 import org.events.Event;
+import org.events.Transaction;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.random.RandomGenerator;
 
 public class Blockchain {
@@ -101,5 +106,15 @@ public class Blockchain {
 
     public Set<Wallet> activeWallets() {
         return activeBlockchainWallets(this);
+    }
+
+    public boolean addPending(Event event) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        if (event instanceof Transaction) {
+            if (!((Transaction) event).verify()) {
+               return false;
+            }
+        }
+        getPending().add(event);
+        return true;
     }
 }

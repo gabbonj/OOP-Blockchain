@@ -36,10 +36,10 @@ class BlockTest {
 
         Date now = new Date();
 
-        Creation c1 = new Creation(now, w1);
-        Creation c2 = new Creation(now, w2);
-        Creation c3 = new Creation(now, w3);
-        Creation c4 = new Creation(now, w4);
+        Creation c1 = new Creation(w1);
+        Creation c2 = new Creation(w2);
+        Creation c3 = new Creation(w3);
+        Creation c4 = new Creation(w4);
         Transaction t1 = w1.createTransaction(w4, 10f);
         Transaction t2 = w2.createTransaction(w3, 5f);
         Transaction t3 = w3.createTransaction(w2, 1f);

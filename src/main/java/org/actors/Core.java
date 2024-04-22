@@ -1,7 +1,11 @@
 package org.actors;
 
 import org.blockchain.Blockchain;
+import org.events.Event;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
 import java.util.Set;
 
 public class Core {
@@ -23,5 +27,9 @@ public class Core {
 
     public Set<Wallet> getWallets() {
         return wallets;
+    }
+
+    public boolean addPending(Event e) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        return getBlockchain().addPending(e);
     }
 }

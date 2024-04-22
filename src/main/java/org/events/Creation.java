@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Creation extends Event{
     private final Wallet created;
 
-    public Creation(Date date, Wallet created) {
+    public Creation(Wallet created) {
         super();
         this.created = created;
     }

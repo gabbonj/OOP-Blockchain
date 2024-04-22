@@ -19,6 +19,6 @@ public class CreationTest {
             throw new RuntimeException(e);
         }
         assertNotNull(w);
-        Creation c = new Creation(new Date(System.currentTimeMillis()), w);
+        Creation c = new Creation(w);
     }
 }
