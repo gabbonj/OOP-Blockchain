@@ -36,7 +36,9 @@ public class Wallet {
     }
 
     public void pullFromCore(Core core) {
-        setPersonalBlockchain(core.getBlockchain());
+        if (getPersonalBlockchain().getUpdated().before(core.getBlockchain().getUpdated()) || getPersonalBlockchain().getBlocks().isEmpty()) {
+            setPersonalBlockchain(core.getBlockchain());
+        }
     }
 
     @Override

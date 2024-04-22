@@ -1,5 +1,6 @@
 package org.actors;
 
+import org.blockchain.Block;
 import org.blockchain.Blockchain;
 import org.events.Event;
 
@@ -31,5 +32,15 @@ public class Core {
 
     public boolean addPending(Event e) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
         return getBlockchain().addPending(e);
+    }
+
+    public void addMinedBlock(Block block) {
+        if (!getBlockchain().addBlock(block)) {
+            return;
+        }
+        updateWallets();
+        for (Wallet wallet : wallets) {
+            wallet.getPersonalBlockchain().addBlock(block);
+        }
     }
 }
