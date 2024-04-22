@@ -82,4 +82,8 @@ public class Wallet {
         }
         return block;
     }
+    public boolean mineOnBlockchain() {
+        Block block = mine();
+        return personalBlockchain.addBlock(block);
+    }
 }
