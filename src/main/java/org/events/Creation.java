@@ -10,7 +10,7 @@ public class Creation extends Event{
     private final Wallet created;
 
     public Creation(Date date, Wallet created) {
-        super(date);
+        super();
         this.created = created;
     }
 
