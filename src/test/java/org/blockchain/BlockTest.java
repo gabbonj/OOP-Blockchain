@@ -1,6 +1,7 @@
 package org.blockchain;
 
 import org.actors.Wallet;
+import org.actors.WalletTest;
 import org.events.Creation;
 import org.events.Event;
 import org.events.Transaction;
@@ -8,33 +9,17 @@ import org.junit.jupiter.api.Test;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.SignatureException;
 import java.util.ArrayList;
-import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class BlockTest {
     public static Block createBlock(int nonce, int zeros) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
-        Wallet w1 = null;
-        Wallet w2 = null;
-        Wallet w3 = null;
-        Wallet w4 = null;
-        try {
-            w1 = new Wallet();
-            w2 = new Wallet();
-            w3 = new Wallet();
-            w4 = new Wallet();
-        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-            throw new RuntimeException(e);
-        }
-        assertNotNull(w1);
-        assertNotNull(w2);
-        assertNotNull(w3);
-        assertNotNull(w4);
-
-        Date now = new Date();
+        Wallet w1 = WalletTest.createWallet();
+        Wallet w2 = WalletTest.createWallet();
+        Wallet w3 = WalletTest.createWallet();
+        Wallet w4 = WalletTest.createWallet();
 
         Creation c1 = new Creation(w1);
         Creation c2 = new Creation(w2);
@@ -60,51 +45,28 @@ class BlockTest {
     }
 
     @Test
-    void creation() {
-        try {
-            Block block = createBlock(0, 10);
-        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
-            throw new RuntimeException(e);
-        }
+    void creation() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        Block block = createBlock(0, 10);
     }
 
     @Test
-    void verifyHash() {
-        Block block = null;
-        try {
-            block = createBlock(0, 3);
-        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
-            throw new RuntimeException(e);
-        }
-        assertNotNull(block);
+    void verifyHash() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        Block block = createBlock(0, 3);
         assertFalse(block.verifyHash());
         while (!block.verifyHash()) {
             block.setNonce(block.getNonce() + 1);
         }
-        System.out.println("Hash verified");
     }
 
     @Test
-    void verifyTransactions() {
-        Block block = null;
-        try {
-            block = createBlock(0, 3);
-        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
-            throw new RuntimeException(e);
-        }
-        assertNotNull(block);
+    void verifyTransactions() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        Block block = createBlock(0, 3);
         assertTrue(block.verifyTransactions());
     }
 
     @Test
-    void verify() {
-        Block block = null;
-        try {
-            block = createBlock(0, 3);
-        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
-            throw new RuntimeException(e);
-        }
-        assertNotNull(block);
+    void verify() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        Block block = createBlock(0, 3);
         assertFalse(block.verify());
         while (!block.verify()) {
             block.setNonce(block.getNonce() + 1);

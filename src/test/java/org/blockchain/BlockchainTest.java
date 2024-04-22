@@ -35,10 +35,8 @@ public class BlockchainTest {
         return blockchain;
     }
     @Test
-    public void creation() {
-        Blockchain blockchain = null;
-        blockchain = new Blockchain();
-        assertNotNull(blockchain);
+    public void creation() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        Blockchain blockchain = createBlockChain();
     }
 
     @Test
@@ -48,7 +46,6 @@ public class BlockchainTest {
         assertNotNull(blockchain);
 
         Block block = BlockTest.createBlock(0, blockchain.getNext_zeros());
-        assertNotNull(block);
         assertFalse(block.verify());
         assertFalse(blockchain.addBlock(block));
         while (!block.verify()) {
@@ -61,7 +58,6 @@ public class BlockchainTest {
     @Test
     public void activeWallets() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
         Blockchain blockchain = createBlockChain();
-
         assertEquals(8, blockchain.activeWallets().size());
     }
 }

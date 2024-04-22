@@ -11,59 +11,44 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class WalletTest {
-    @Test
-    public void createWallet() {
+    public static Wallet createWallet() {
+        Wallet w = null;
         try {
-            Wallet w = new Wallet();
+            w = new Wallet();
         } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Wallet created successfully");
+        assertNotNull(w);
+        return w;
+    }
+    @Test
+    public void walletCreation() {
+        Wallet w = createWallet();
     }
 
     @Test
     public void createTransaction() {
-        Wallet pino = null;
-        Wallet giovanni = null;
-        try {
-            pino = new Wallet();
-            giovanni = new Wallet();
-        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-            throw new RuntimeException(e);
-        }
-        assertNotNull(pino);
-        assertNotNull(giovanni);
+        Wallet pino = createWallet();
+        Wallet giovanni = createWallet();
 
         try {
             Transaction t = pino.createTransaction(giovanni, 10);
         } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Transaction created successfully");
     }
 
     @Test
     public void pullFromCore() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
-        Wallet w = null;
-        try {
-            w = new Wallet();
-        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-            throw new RuntimeException(e);
-        }
-        assertNotNull(w);
+        Wallet w = createWallet();
         Core core = CoreTest.creteCore();
         w.pullFromCore(core);
+        assertEquals(w.getPersonalBlockchain().getBlocks(), core.getBlockchain().getBlocks());
     }
 
     @Test
     public void mine() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
-        Wallet w = null;
-        try {
-            w = new Wallet();
-        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-            throw new RuntimeException(e);
-        }
-        assertNotNull(w);
+        Wallet w = createWallet();
         Core core = CoreTest.creteCore();
         w.pullFromCore(core);
 
@@ -77,13 +62,7 @@ public class WalletTest {
 
     @Test
     public void mineOnBlockchain() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
-        Wallet w = null;
-        try {
-            w = new Wallet();
-        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
-            throw new RuntimeException(e);
-        }
-        assertNotNull(w);
+        Wallet w = createWallet();
         Core core = CoreTest.creteCore();
         w.pullFromCore(core);
 
