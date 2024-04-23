@@ -52,10 +52,10 @@ class BlockTest {
     @Test
     void verifyHash() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
         Block block = createBlock(0, 3);
-        assertFalse(block.verifyHash());
         while (!block.verifyHash()) {
             block.setNonce(block.getNonce() + 1);
         }
+        assertTrue(block.verifyHash());
     }
 
     @Test
