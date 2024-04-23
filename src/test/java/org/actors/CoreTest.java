@@ -85,4 +85,12 @@ class CoreTest {
         Core wrongCore = CoreTest.creteCore();
         assertFalse(wrongCore.checkTrust());
     }
+
+    @Test
+    public void mostTrusted() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        Core coreNotUpdated = CoreTest.creteCore();
+        assertFalse(coreNotUpdated.checkTrust());
+        Core coreUpdated = CoreTest.creteCoreUpdated();
+        assertTrue(coreUpdated.checkTrust());
+    }
 }
