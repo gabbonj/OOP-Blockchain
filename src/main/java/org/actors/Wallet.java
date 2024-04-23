@@ -37,6 +37,7 @@ public class Wallet {
 
     public void pullFromCore(Core core) {
         if (getPersonalBlockchain().getUpdated().before(core.getBlockchain().getUpdated()) || getPersonalBlockchain().getBlocks().isEmpty()) {
+            // TODO : Do deep copy here
             setPersonalBlockchain(core.getBlockchain());
         }
     }
@@ -86,6 +87,13 @@ public class Wallet {
     }
     public boolean mineOnBlockchain() {
         Block block = mine();
-        return personalBlockchain.addBlock(block);
+        if (personalBlockchain.addBlock(block)) {
+            for (Event e : block.getEvents()) {
+                personalBlockchain.getPending().remove(e);
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }

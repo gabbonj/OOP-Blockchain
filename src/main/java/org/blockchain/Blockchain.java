@@ -57,6 +57,10 @@ public class Blockchain {
         return next_zeros;
     }
 
+    private void setNext_zeros(int next_zeros) {
+        this.next_zeros = next_zeros;
+    }
+
     public int getMax_tokens() {
         return max_tokens;
     }

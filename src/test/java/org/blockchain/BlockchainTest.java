@@ -1,5 +1,8 @@
 package org.blockchain;
 
+import org.actors.Wallet;
+import org.actors.WalletTest;
+import org.events.Creation;
 import org.junit.Test;
 
 import java.security.InvalidKeyException;
@@ -34,6 +37,15 @@ public class BlockchainTest {
 
         return blockchain;
     }
+
+    public static Blockchain createPendingBlockchain() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        Blockchain blockchain = createBlockChain();
+        Wallet wallet = WalletTest.createWallet();
+        Creation creation = new Creation(wallet);
+        blockchain.addPending(creation);
+        return blockchain;
+    }
+
     @Test
     public void creation() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
         Blockchain blockchain = createBlockChain();

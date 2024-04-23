@@ -80,4 +80,15 @@ public class Core {
             return getBlockchain();
         }
     }
+
+    private void setBlockchain(Blockchain blockchain) {
+        this.blockchain = blockchain;
+    }
+
+    public void pullMostTrusted() {
+        updateWallets();
+        if (!checkTrust()) {
+            setBlockchain(mostTrusted());
+        }
+    }
 }

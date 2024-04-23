@@ -31,6 +31,14 @@ class CoreTest {
         return core;
     }
 
+    public static Core creteCoreUpdatedPending() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        Core core = new Core(BlockchainTest.createPendingBlockchain());
+        for (Wallet wallet : core.getWallets()) {
+            wallet.pullFromCore(core);
+        }
+        return core;
+    }
+
     @Test
     public void creation() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
         Core core = creteCore();
@@ -82,14 +90,33 @@ class CoreTest {
     public void checkTrust() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
         Core core = CoreTest.creteCoreUpdated();
         assertTrue(core.checkTrust());
+
         Core wrongCore = CoreTest.creteCore();
         assertFalse(wrongCore.checkTrust());
     }
 
     @Test
     public void mostTrusted() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
-        Core coreNotUpdated = CoreTest.creteCore();
-        assertFalse(coreNotUpdated.checkTrust());
+        // TODO
+        Core coreUpdated = CoreTest.creteCoreUpdated();
+        assertEquals(coreUpdated.getBlockchain(), coreUpdated.mostTrusted());
+
+        Core corePending = CoreTest.creteCoreUpdatedPending();
+        for (Wallet wallet : corePending.getWallets()) {
+            wallet.mineOnBlockchain();
+        }
+        // TODO
+        assertNotEquals(coreUpdated.getBlockchain(), coreUpdated.mostTrusted());
+    }
+
+    @Test
+    public void pullMostTrusted() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        Core core = CoreTest.creteCoreUpdatedPending();
+
+
+        core.pullMostTrusted();
+        assertTrue(core.checkTrust());
+
         Core coreUpdated = CoreTest.creteCoreUpdated();
         assertTrue(coreUpdated.checkTrust());
     }

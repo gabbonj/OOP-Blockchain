@@ -2,11 +2,9 @@ package org.events;
 
 import org.actors.Wallet;
 
-import java.security.Signature;
-import java.util.Date;
 import java.util.Objects;
 
-public class Creation extends Event{
+public class Creation extends Event {
     private final Wallet created;
 
     public Creation(Wallet created) {
