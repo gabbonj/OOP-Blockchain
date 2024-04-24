@@ -2,6 +2,7 @@ package org.events;
 
 import org.actors.Wallet;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class Creation extends Event {
@@ -12,16 +13,27 @@ public class Creation extends Event {
         this.created = created;
     }
 
+    public Creation(Date date, Wallet created) {
+        super(date);
+        this.created = created;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Creation creation)) return false;
+        if (!super.equals(o)) return false;
         return Objects.equals(getCreated(), creation.getCreated());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCreated());
+        return Objects.hash(super.hashCode(), getCreated());
+    }
+
+    @Override
+    public Creation clone() throws CloneNotSupportedException {
+        return new Creation(new Date(getDate().getTime()), getCreated());
     }
 
     public Wallet getCreated() {

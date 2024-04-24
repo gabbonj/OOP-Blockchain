@@ -18,4 +18,12 @@ public class CreationTest {
         Creation c = new Creation(w);
         assertEquals(w, c.getCreated());
     }
+
+    @Test
+    public void testClone() throws CloneNotSupportedException {
+        Wallet wallet = WalletTest.createWallet();
+        Creation creation = new Creation(wallet);
+        Creation clone = creation.clone();
+        assertEquals(creation, clone);
+    }
 }

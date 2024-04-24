@@ -29,6 +29,17 @@ public class Transaction extends Event {
         this.signture = signature;
     }
 
+    public Transaction(Date date, Wallet from, Wallet to, float amount, byte[] signature) throws SignatureException, NoSuchAlgorithmException, InvalidKeyException {
+        super(date);
+        if (!verifyTransaction(from, to, amount, signature)) {
+            throw new SignatureException("Invalid Signature");
+        }
+        this.to = to;
+        this.amount = amount;
+        this.signture = signature;
+        this.from = from;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -41,6 +52,17 @@ public class Transaction extends Event {
         int result = Objects.hash(getTo(), getAmount(), getFrom());
         result = 31 * result + Arrays.hashCode(getSignture());
         return result;
+    }
+
+    @Override
+    public Transaction clone() {
+        Transaction transaction;
+        try {
+            transaction = new Transaction(new Date(getDate().getTime()), getFrom(), getTo(), getAmount(), getSignture());
+        } catch (SignatureException | NoSuchAlgorithmException | InvalidKeyException e) {
+            throw new RuntimeException(e);
+        }
+        return transaction;
     }
 
     public Wallet getFrom() {
