@@ -32,7 +32,7 @@ public class Creation extends Event {
     }
 
     @Override
-    public Creation clone() throws CloneNotSupportedException {
+    public Creation clone() {
         return new Creation(new Date(getDate().getTime()), getCreated());
     }
 

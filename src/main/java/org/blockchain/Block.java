@@ -47,6 +47,15 @@ public class Block {
         return Objects.hash(getZeros(), getEvents(), getMiner(), getNonce());
     }
 
+    @Override
+    protected Block clone() {
+        ArrayList<Event> eventsCopy = new ArrayList<>();
+        for (Event event : getEvents()) {
+            eventsCopy.add(event.clone());
+        }
+        return new Block(getNonce(), getZeros(), eventsCopy, getMiner());
+    }
+
     public ArrayList<Event> getEvents() {
         return events;
     }

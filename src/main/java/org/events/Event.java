@@ -32,7 +32,7 @@ public class Event {
     }
 
     @Override
-    public Event clone() throws CloneNotSupportedException {
+    public Event clone() {
         return new Event(new Date(getDate().getTime()));
     }
 }

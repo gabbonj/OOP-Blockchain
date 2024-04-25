@@ -72,4 +72,11 @@ class BlockTest {
             block.setNonce(block.getNonce() + 1);
         }
     }
+
+    @Test
+    public void testClone() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        Block block = createBlock(0, 3);
+        Block clone = block.clone();
+        assertEquals(block, clone);
+    }
 }
