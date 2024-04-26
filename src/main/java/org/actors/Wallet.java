@@ -37,8 +37,15 @@ public class Wallet {
 
     public void pullFromCore(Core core) {
         if (getPersonalBlockchain().getUpdated().before(core.getBlockchain().getUpdated()) || getPersonalBlockchain().getBlocks().isEmpty()) {
-            // TODO : Do deep copy here
-            setPersonalBlockchain(core.getBlockchain());
+            setPersonalBlockchain(core.getBlockchain().clone());
+        }
+    }
+
+    public void pullFromCore(Core core, boolean forced) {
+        if (forced) {
+            setPersonalBlockchain(core.getBlockchain().clone());
+        } else {
+            pullFromCore(core);
         }
     }
 
