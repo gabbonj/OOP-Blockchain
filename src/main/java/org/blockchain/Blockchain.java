@@ -162,7 +162,7 @@ public class Blockchain {
 
     public Map<Wallet, Float> balances() {
         Map<Wallet, Float> balances = activeWallets().stream().collect(Collectors.toMap(wallet -> wallet, wallet -> 0f));
-        int index = 0;
+        int index = 1;
         for (Block block : getBlocks()) {
             updateBalance(balances, block.getMiner(), reward(index));
             for (Event event : block.getEvents()) {

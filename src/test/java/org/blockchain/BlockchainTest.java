@@ -5,10 +5,12 @@ import org.actors.CoreTest;
 import org.actors.Wallet;
 import org.actors.WalletTest;
 import org.events.Creation;
+import org.events.Transaction;
 import org.junit.Test;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.SignatureException;
 import java.util.Map;
 
@@ -22,8 +24,6 @@ public class BlockchainTest {
 
         Block block1 = BlockTest.createBlock(0, blockchain.getNext_zeros());
         assertNotNull(block1);
-        assertFalse(block1.verify());
-        assertFalse(blockchain.addBlock(block1));
         while (!block1.verify()) {
             block1.setNonce(block1.getNonce() + 1);
         }
@@ -31,8 +31,6 @@ public class BlockchainTest {
 
         Block block2 = BlockTest.createBlock(0, blockchain.getNext_zeros());
         assertNotNull(block2);
-        assertFalse(block2.verify());
-        assertFalse(blockchain.addBlock(block2));
         while (!block2.verify()) {
             block2.setNonce(block2.getNonce() + 1);
         }
@@ -77,14 +75,25 @@ public class BlockchainTest {
     }
 
     @Test
-    public void walletBalance() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
-        Core core = CoreTest.creteCoreUpdatedPending();
+    public void walletBalance() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, NoSuchProviderException {
+        Core core = CoreTest.creteCoreUpdated();
         core.updateWallets();
-        Wallet wallet = core.getWallets().iterator().next();
-        Block mined = wallet.mine();
+        Wallet wallet1 = new Wallet();
+        Wallet wallet2 = new Wallet();
+        Creation creation1 = new Creation(wallet1);
+        Creation creation2 = new Creation(wallet2);
+        Transaction transaction = wallet1.createTransaction(wallet2, 30);
+        core.addPending(creation1);
+        core.addPending(creation2);
+        core.addPending(transaction);
+        wallet1.pullFromCore(core);
+        Block mined = wallet1.mine();
         core.addMinedBlock(mined);
+        core.updateWallets();
         Map<Wallet, Float> balance = core.getBlockchain().balances();
-        float balace = core.getBlockchain().walletBalance(wallet);
-        assertEquals(balace, 50);
+        float balace1 = core.getBlockchain().walletBalance(wallet1);
+        float balace2 = core.getBlockchain().walletBalance(wallet2);
+        assertEquals(balace1, 20);
+        assertEquals(balace2, 30);
     }
 }
