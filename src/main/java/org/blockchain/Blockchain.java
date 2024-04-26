@@ -16,8 +16,8 @@ public class Blockchain {
     private final int max_tokens = 1000000;
     private final int max_block_events = 15;
     int next_zeros;
-    private final LinkedList<Block> blocks;
-    private final ArrayList<Event> pending;
+    private LinkedList<Block> blocks;
+    private ArrayList<Event> pending;
     private Date updated;
 
     public Blockchain() {
@@ -73,6 +73,14 @@ public class Blockchain {
         return verifyBlockchain(this);
     }
 
+    private void setBlocks(LinkedList<Block> blocks) {
+        this.blocks = blocks;
+    }
+
+    private void setPending(ArrayList<Event> pending) {
+        this.pending = pending;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -83,6 +91,24 @@ public class Blockchain {
     @Override
     public int hashCode() {
         return Objects.hash(getMax_tokens(), getMax_block_events(), getNext_zeros(), getBlocks(), getPending(), getUpdated());
+    }
+
+    @Override
+    public Blockchain clone() {
+        Blockchain blockchain = new Blockchain();
+        blockchain.setNext_zeros(getNext_zeros());
+        blockchain.setUpdated(new Date(getUpdated().getTime()));
+        LinkedList<Block> blocksClone = new LinkedList<>();
+        for (Block block : getBlocks()) {
+            blocksClone.add(block.clone());
+        }
+        blockchain.setBlocks(blocksClone);
+        ArrayList<Event> pendingClone = new ArrayList<>();
+        for (Event event : getPending()) {
+            pendingClone.add(event.clone());
+        }
+        blockchain.setPending(pendingClone);
+        return blockchain;
     }
 
     public boolean addBlock(Block block) {
