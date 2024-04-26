@@ -11,6 +11,7 @@ import java.security.SignatureException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.random.RandomGenerator;
+import java.util.stream.Collectors;
 
 public class Blockchain {
     private final int max_tokens = 1000000;
@@ -149,23 +150,35 @@ public class Blockchain {
         return true;
     }
 
-    private int reward(int blockIndex) {
+    private float reward(int blockIndex) {
         // TODO : implement the halving function
         return  50;
     }
 
-    public int walletBalance(Wallet wallet) {
-        // TODO : implement transactions in tha balance calculation
-        int balace = 0;
-        int index = 1;
+    private void updateBalance(Map<Wallet, Float> balances, Wallet key, Float change) {
+        if (balances.containsKey(key)) {
+            balances.put(key, balances.get(key) + change);
+        }
+    }
+
+    public Map<Wallet, Float> balances() {
+        // TODO : Check the current balance of a wallet before making a transaction
+        Map<Wallet, Float> balances = activeWallets().stream().collect(Collectors.toMap(wallet -> wallet, wallet -> 0f));
+        int index = 0;
         for (Block block : getBlocks()) {
+            updateBalance(balances, block.getMiner(), reward(index));
             for (Event event : block.getEvents()) {
-                if (event instanceof Creation && ((Creation) event).getCreated() == wallet) {
-                    balace += reward(index);
+                if (event instanceof Transaction transaction) {
+                    updateBalance(balances, transaction.getFrom(), -transaction.getAmount());
+                    updateBalance(balances, transaction.getTo(), transaction.getAmount());
                 }
             }
             index++;
         }
-        return balace;
+        return  balances;
+    }
+
+    public float walletBalance(Wallet wallet) {
+        return balances().get(wallet);
     }
 }

@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -82,7 +83,8 @@ public class BlockchainTest {
         Wallet wallet = core.getWallets().iterator().next();
         Block mined = wallet.mine();
         core.addMinedBlock(mined);
-        int balace = core.getBlockchain().walletBalance(wallet);
+        Map<Wallet, Float> balance = core.getBlockchain().balances();
+        float balace = core.getBlockchain().walletBalance(wallet);
         assertEquals(balace, 50);
     }
 }
