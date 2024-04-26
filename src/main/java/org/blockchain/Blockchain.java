@@ -168,7 +168,7 @@ public class Blockchain {
         for (Block block : getBlocks()) {
             updateBalance(balances, block.getMiner(), reward(index));
             for (Event event : block.getEvents()) {
-                if (event instanceof Transaction transaction) {
+                if (event instanceof Transaction transaction && transaction.getAmount() <= balances.get(transaction.getFrom())) {
                     updateBalance(balances, transaction.getFrom(), -transaction.getAmount());
                     updateBalance(balances, transaction.getTo(), transaction.getAmount());
                 }
