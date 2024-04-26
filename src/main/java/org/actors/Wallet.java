@@ -8,9 +8,7 @@ import org.events.Transaction;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Objects;
-import java.util.Optional;
 
 public class Wallet {
     private final PrivateKey privateKey;
@@ -78,7 +76,7 @@ public class Wallet {
 
     public Block mine() {
         ArrayList<Event> pending = personalBlockchain.getPending();
-        ArrayList<Event> content = new ArrayList<>(){};
+        ArrayList<Event> content = new ArrayList<>() {};
         for (int i = 0; i < Math.min(pending.size(), personalBlockchain.getMax_block_events()); i++) {
             content.add(pending.get(i));
         }

@@ -4,7 +4,10 @@ import org.events.Creation;
 import org.events.Transaction;
 import org.junit.Test;
 
-import java.security.*;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SignatureException;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,6 +24,7 @@ public class WalletTest {
         assertNotNull(w);
         return w;
     }
+
     @Test
     public void walletCreation() {
         Wallet w = createWallet();

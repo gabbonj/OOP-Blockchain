@@ -1,15 +1,10 @@
 package org.events;
 
-import javax.xml.crypto.Data;
 import java.util.Date;
 import java.util.Objects;
 
 public class Event {
-    private Date date;
-
-    public Date getDate() {
-        return date;
-    }
+    private final Date date;
 
     public Event() {
         date = new Date();
@@ -17,6 +12,10 @@ public class Event {
 
     public Event(Date date) {
         this.date = date;
+    }
+
+    public Date getDate() {
+        return date;
     }
 
     @Override

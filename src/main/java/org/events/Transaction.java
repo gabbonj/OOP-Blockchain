@@ -40,6 +40,15 @@ public class Transaction extends Event {
         this.from = from;
     }
 
+    public static boolean verifyTransaction(Wallet from, Wallet to, float amount, byte[] signature) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        Signature verifier = Signature.getInstance("SHA256withRSA");
+        verifier.initVerify(from.getPublicKey());
+        String message = Float.toString(amount) + to.getPublicKey();
+        verifier.update(message.getBytes(StandardCharsets.UTF_8));
+
+        return verifier.verify(signature);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,15 +88,6 @@ public class Transaction extends Event {
 
     public byte[] getSignture() {
         return signture;
-    }
-
-    public static boolean verifyTransaction(Wallet from, Wallet to, float amount, byte[] signature) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        Signature verifier = Signature.getInstance("SHA256withRSA");
-        verifier.initVerify(from.getPublicKey());
-        String message = Float.toString(amount) + to.getPublicKey();
-        verifier.update(message.getBytes(StandardCharsets.UTF_8));
-
-        return verifier.verify(signature);
     }
 
     public boolean verify() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {

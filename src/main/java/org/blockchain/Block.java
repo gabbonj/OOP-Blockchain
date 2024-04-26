@@ -23,6 +23,29 @@ public class Block {
         this.miner = miner;
     }
 
+    public static boolean verifyBlockHash(Block block) {
+        return String.valueOf(block.hashCode()).endsWith("0".repeat(block.getZeros()));
+    }
+
+    public static boolean verifyBlockTransactions(Block block) {
+        for (Event e : block.getEvents()) {
+            if (e instanceof Transaction) {
+                try {
+                    if (!((Transaction) e).verify()) {
+                        return false;
+                    }
+                } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean verifyBlock(Block block) {
+        return verifyBlockHash(block) && verifyBlockTransactions(block);
+    }
+
     public int getNonce() {
         return nonce;
     }
@@ -64,35 +87,12 @@ public class Block {
         return miner;
     }
 
-    public static boolean verifyBlockHash(Block block) {
-        return String.valueOf(block.hashCode()).endsWith("0".repeat(block.getZeros()));
-    }
-
     public boolean verifyHash() {
         return verifyBlockHash(this);
     }
 
-    public static boolean verifyBlockTransactions(Block block) {
-        for (Event e : block.getEvents()) {
-            if (e instanceof Transaction) {
-                try {
-                    if (!((Transaction) e).verify()) {
-                        return false;
-                    }
-                } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        }
-        return true;
-    }
-
     public boolean verifyTransactions() {
         return verifyBlockTransactions(this);
-    }
-
-    public static boolean verifyBlock(Block block) {
-        return verifyBlockHash(block) && verifyBlockTransactions(block);
     }
 
     public boolean verify() {

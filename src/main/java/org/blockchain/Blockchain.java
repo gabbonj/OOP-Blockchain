@@ -9,7 +9,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 
@@ -38,12 +37,32 @@ public class Blockchain {
         return true;
     }
 
+    public static Set<Wallet> activeBlockchainWallets(Blockchain blockchain) {
+        Set<Wallet> wallets = new HashSet<>();
+        for (Block block : blockchain.getBlocks()) {
+            for (Event e : block.getEvents()) {
+                if (e instanceof Creation) {
+                    wallets.add(((Creation) e).getCreated());
+                }
+            }
+        }
+        return wallets;
+    }
+
     public LinkedList<Block> getBlocks() {
         return blocks;
     }
 
+    private void setBlocks(LinkedList<Block> blocks) {
+        this.blocks = blocks;
+    }
+
     public ArrayList<Event> getPending() {
         return pending;
+    }
+
+    private void setPending(ArrayList<Event> pending) {
+        this.pending = pending;
     }
 
     public Date getUpdated() {
@@ -72,14 +91,6 @@ public class Blockchain {
 
     public boolean verify() {
         return verifyBlockchain(this);
-    }
-
-    private void setBlocks(LinkedList<Block> blocks) {
-        this.blocks = blocks;
-    }
-
-    private void setPending(ArrayList<Event> pending) {
-        this.pending = pending;
     }
 
     @Override
@@ -123,18 +134,6 @@ public class Blockchain {
         return true;
     }
 
-    public static Set<Wallet> activeBlockchainWallets(Blockchain blockchain) {
-        Set<Wallet> wallets = new HashSet<>();
-        for (Block block : blockchain.getBlocks()) {
-            for (Event e : block.getEvents()) {
-                if (e instanceof Creation) {
-                    wallets.add(((Creation) e).getCreated());
-                }
-            }
-        }
-        return wallets;
-    }
-
     public Set<Wallet> activeWallets() {
         return activeBlockchainWallets(this);
     }
@@ -142,7 +141,7 @@ public class Blockchain {
     public boolean addPending(Event event) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
         if (event instanceof Transaction) {
             if (!((Transaction) event).verify()) {
-               return false;
+                return false;
             }
         }
         setUpdated(new Date());
@@ -152,7 +151,7 @@ public class Blockchain {
 
     private float reward(int blockIndex) {
         // TODO : implement the halving function
-        return  50;
+        return 50;
     }
 
     private void updateBalance(Map<Wallet, Float> balances, Wallet key, Float change) {
@@ -162,7 +161,6 @@ public class Blockchain {
     }
 
     public Map<Wallet, Float> balances() {
-        // TODO : Check the current balance of a wallet before making a transaction
         Map<Wallet, Float> balances = activeWallets().stream().collect(Collectors.toMap(wallet -> wallet, wallet -> 0f));
         int index = 0;
         for (Block block : getBlocks()) {
@@ -175,7 +173,7 @@ public class Blockchain {
             }
             index++;
         }
-        return  balances;
+        return balances;
     }
 
     public float walletBalance(Wallet wallet) {

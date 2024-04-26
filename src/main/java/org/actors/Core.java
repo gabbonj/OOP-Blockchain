@@ -4,12 +4,11 @@ import org.blockchain.Block;
 import org.blockchain.Blockchain;
 import org.events.Event;
 
-import java.lang.module.FindException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
 import java.security.SignatureException;
-import java.util.*;
+import java.util.Optional;
+import java.util.Set;
 
 public class Core {
     private Blockchain blockchain;
@@ -26,6 +25,10 @@ public class Core {
 
     public Blockchain getBlockchain() {
         return blockchain;
+    }
+
+    private void setBlockchain(Blockchain blockchain) {
+        this.blockchain = blockchain;
     }
 
     public Set<Wallet> getWallets() {
@@ -64,7 +67,7 @@ public class Core {
         int trust;
         for (Wallet trusted : getWallets()) {
             trust = 0;
-            for (Wallet truster: getWallets()) {
+            for (Wallet truster : getWallets()) {
                 if (trusted != truster && trusted.getPersonalBlockchain().equals(truster.getPersonalBlockchain())) {
                     trust++;
                 }
@@ -79,10 +82,6 @@ public class Core {
         } else {
             return getBlockchain();
         }
-    }
-
-    private void setBlockchain(Blockchain blockchain) {
-        this.blockchain = blockchain;
     }
 
     public void pullMostTrusted() {
