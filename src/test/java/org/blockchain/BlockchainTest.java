@@ -1,5 +1,7 @@
 package org.blockchain;
 
+import org.actors.Core;
+import org.actors.CoreTest;
 import org.actors.Wallet;
 import org.actors.WalletTest;
 import org.events.Creation;
@@ -71,5 +73,16 @@ public class BlockchainTest {
     public void activeWallets() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
         Blockchain blockchain = createBlockChain();
         assertEquals(8, blockchain.activeWallets().size());
+    }
+
+    @Test
+    public void walletBalance() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        Core core = CoreTest.creteCoreUpdatedPending();
+        core.updateWallets();
+        Wallet wallet = core.getWallets().iterator().next();
+        Block mined = wallet.mine();
+        core.addMinedBlock(mined);
+        int balace = core.getBlockchain().walletBalance(wallet);
+        assertEquals(balace, 50);
     }
 }

@@ -148,4 +148,24 @@ public class Blockchain {
         getPending().add(event);
         return true;
     }
+
+    private int reward(int blockIndex) {
+        // TODO : implement the halving function
+        return  50;
+    }
+
+    public int walletBalance(Wallet wallet) {
+        // TODO : implement transactions in tha balance calculation
+        int balace = 0;
+        int index = 1;
+        for (Block block : getBlocks()) {
+            for (Event event : block.getEvents()) {
+                if (event instanceof Creation && ((Creation) event).getCreated() == wallet) {
+                    balace += reward(index);
+                }
+            }
+            index++;
+        }
+        return balace;
+    }
 }

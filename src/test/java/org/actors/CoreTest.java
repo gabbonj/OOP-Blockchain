@@ -14,7 +14,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CoreTest {
+public class CoreTest {
     public static Core creteCore() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
         Blockchain blockchain = BlockchainTest.createBlockChain();
         Core core = null;
