@@ -13,7 +13,9 @@ import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 
 public class Blockchain {
-    private final int max_tokens = 1000000;
+    final float blockPerEra = 200f;
+    final float rewardFirstera = 50f;
+    final float halvingFactor = 2f;
     private final int max_block_events = 15;
     int next_zeros;
     private LinkedList<Block> blocks;
@@ -81,10 +83,6 @@ public class Blockchain {
         this.next_zeros = next_zeros;
     }
 
-    public int getMax_tokens() {
-        return max_tokens;
-    }
-
     public int getMax_block_events() {
         return max_block_events;
     }
@@ -97,12 +95,12 @@ public class Blockchain {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Blockchain that)) return false;
-        return getMax_tokens() == that.getMax_tokens() && getMax_block_events() == that.getMax_block_events() && getNext_zeros() == that.getNext_zeros() && Objects.equals(getBlocks(), that.getBlocks()) && Objects.equals(getPending(), that.getPending()) && Objects.equals(getUpdated(), that.getUpdated());
+        return getMax_block_events() == that.getMax_block_events() && getNext_zeros() == that.getNext_zeros() && Objects.equals(getBlocks(), that.getBlocks()) && Objects.equals(getPending(), that.getPending()) && Objects.equals(getUpdated(), that.getUpdated());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getMax_tokens(), getMax_block_events(), getNext_zeros(), getBlocks(), getPending(), getUpdated());
+        return Objects.hash(blockPerEra, rewardFirstera, halvingFactor, getMax_block_events(), getNext_zeros(), getBlocks(), getPending(), getUpdated());
     }
 
     @Override
@@ -150,8 +148,7 @@ public class Blockchain {
     }
 
     private float reward(int blockIndex) {
-        // TODO : implement the halving function
-        return 50;
+        return (float) (rewardFirstera / Math.pow(halvingFactor, Math.floor(blockIndex / blockPerEra)));
     }
 
     private void updateBalance(Map<Wallet, Float> balances, Wallet key, Float change) {
