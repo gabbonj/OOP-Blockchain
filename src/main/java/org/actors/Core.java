@@ -40,13 +40,6 @@ public class Core {
     }
 
     public void addMinedBlock(Block block) {
-        for (Event event : block.getEvents()) {
-            if (!getBlockchain().getPending().contains(event)) {
-                return;
-            } else {
-                getBlockchain().getPending().remove(event);
-            }
-        }
         if (!getBlockchain().addBlock(block)) {
             return;
         }

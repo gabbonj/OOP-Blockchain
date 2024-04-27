@@ -93,13 +93,6 @@ public class Wallet {
 
     public boolean mineOnBlockchain() {
         Block block = mine();
-        if (personalBlockchain.addBlock(block)) {
-            for (Event e : block.getEvents()) {
-                personalBlockchain.getPending().remove(e);
-            }
-            return true;
-        } else {
-            return false;
-        }
+        return personalBlockchain.addBlock(block);
     }
 }

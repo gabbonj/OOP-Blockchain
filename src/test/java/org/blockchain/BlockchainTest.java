@@ -5,6 +5,7 @@ import org.actors.CoreTest;
 import org.actors.Wallet;
 import org.actors.WalletTest;
 import org.events.Creation;
+import org.events.Event;
 import org.events.Transaction;
 import org.junit.Test;
 
@@ -24,6 +25,9 @@ public class BlockchainTest {
 
         Block block1 = BlockTest.createBlock(0, blockchain.getNext_zeros());
         assertNotNull(block1);
+        for (Event event : block1.getEvents()) {
+            blockchain.addPending(event);
+        }
         while (!block1.verify()) {
             block1.setNonce(block1.getNonce() + 1);
         }
@@ -31,6 +35,9 @@ public class BlockchainTest {
 
         Block block2 = BlockTest.createBlock(0, blockchain.getNext_zeros());
         assertNotNull(block2);
+        for (Event event : block2.getEvents()) {
+            blockchain.addPending(event);
+        }
         while (!block2.verify()) {
             block2.setNonce(block2.getNonce() + 1);
         }
@@ -64,6 +71,9 @@ public class BlockchainTest {
         while (!block.verify()) {
             block.setNonce(block.getNonce() + 1);
         }
+        for (Event event : block.getEvents()) {
+            blockchain.addPending(event);
+        }
         assertTrue(blockchain.addBlock(block));
         assertEquals(1, blockchain.getBlocks().size());
     }
@@ -93,7 +103,8 @@ public class BlockchainTest {
         Map<Wallet, Float> balance = core.getBlockchain().balances();
         float balace1 = core.getBlockchain().walletBalance(wallet1);
         float balace2 = core.getBlockchain().walletBalance(wallet2);
-        assertEquals(balace1, 20);
-        assertEquals(balace2, 30);
+        assertEquals(0, core.getBlockchain().getPending().size());
+        assertEquals(20, balace1);
+        assertEquals(30, balace2);
     }
 }

@@ -80,6 +80,7 @@ public class CoreTest {
         Block mined = w.mine();
         core.addMinedBlock(mined);
         for (Wallet wallet : core.getWallets()) {
+            wallet.pullFromCore(core);
             Block lastBlock = wallet.getPersonalBlockchain().getBlocks().getLast();
             Event lastEvent = lastBlock.getEvents().getLast();
             assertInstanceOf(Creation.class, lastEvent);

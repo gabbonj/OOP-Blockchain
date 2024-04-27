@@ -122,6 +122,14 @@ public class Blockchain {
     }
 
     public boolean addBlock(Block block) {
+        for (Event event : block.getEvents()) {
+            if (!getPending().contains(event)) {
+                return false;
+            }
+        }
+        for (Event event : block.getEvents()) {
+            getPending().remove(event);
+        }
         if (!block.verify() || block.getEvents().size() > getMax_block_events()) {
             return false;
         }
