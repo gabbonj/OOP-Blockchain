@@ -1,7 +1,7 @@
-package org.events;
+package org.blockchain.events;
 
-import org.actors.Wallet;
-import org.actors.WalletTest;
+import org.blockchain.actors.Wallet;
+import org.blockchain.actors.WalletTest;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

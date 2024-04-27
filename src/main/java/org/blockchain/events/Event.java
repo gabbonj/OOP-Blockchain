@@ -1,4 +1,4 @@
-package org.events;
+package org.blockchain.events;
 
 import java.util.Date;
 import java.util.Objects;

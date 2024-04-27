@@ -1,8 +1,8 @@
-package org.actors;
+package org.blockchain.actors;
 
-import org.blockchain.Block;
-import org.blockchain.Blockchain;
-import org.events.Event;
+import org.blockchain.blockchain.Block;
+import org.blockchain.blockchain.Blockchain;
+import org.blockchain.events.Event;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;

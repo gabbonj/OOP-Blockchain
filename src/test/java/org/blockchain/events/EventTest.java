@@ -1,4 +1,4 @@
-package org.events;
+package org.blockchain.events;
 
 import org.junit.jupiter.api.Test;
 

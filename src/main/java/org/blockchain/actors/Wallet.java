@@ -1,9 +1,9 @@
-package org.actors;
+package org.blockchain.actors;
 
-import org.blockchain.Block;
-import org.blockchain.Blockchain;
-import org.events.Event;
-import org.events.Transaction;
+import org.blockchain.blockchain.Block;
+import org.blockchain.blockchain.Blockchain;
+import org.blockchain.events.Transaction;
+import org.blockchain.events.Event;
 
 import java.nio.charset.StandardCharsets;
 import java.security.*;

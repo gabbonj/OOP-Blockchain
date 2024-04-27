@@ -1,6 +1,6 @@
-package org.events;
+package org.blockchain.events;
 
-import org.actors.Wallet;
+import org.blockchain.actors.Wallet;
 
 import java.util.Date;
 import java.util.Objects;

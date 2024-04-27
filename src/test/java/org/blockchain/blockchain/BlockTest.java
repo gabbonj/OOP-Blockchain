@@ -1,10 +1,10 @@
-package org.blockchain;
+package org.blockchain.blockchain;
 
-import org.actors.Wallet;
-import org.actors.WalletTest;
-import org.events.Creation;
-import org.events.Event;
-import org.events.Transaction;
+import org.blockchain.actors.Wallet;
+import org.blockchain.actors.WalletTest;
+import org.blockchain.events.Creation;
+import org.blockchain.events.Event;
+import org.blockchain.events.Transaction;
 import org.junit.jupiter.api.Test;
 
 import java.security.InvalidKeyException;

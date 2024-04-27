@@ -1,9 +1,9 @@
-package org.blockchain;
+package org.blockchain.blockchain;
 
-import org.actors.Wallet;
-import org.events.Creation;
-import org.events.Event;
-import org.events.Transaction;
+import org.blockchain.actors.Wallet;
+import org.blockchain.events.Creation;
+import org.blockchain.events.Event;
+import org.blockchain.events.Transaction;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;

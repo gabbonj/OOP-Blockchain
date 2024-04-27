@@ -1,10 +1,10 @@
-package org.actors;
+package org.blockchain.actors;
 
-import org.blockchain.Block;
-import org.blockchain.Blockchain;
-import org.blockchain.BlockchainTest;
-import org.events.Creation;
-import org.events.Event;
+import org.blockchain.blockchain.Block;
+import org.blockchain.blockchain.Blockchain;
+import org.blockchain.blockchain.BlockchainTest;
+import org.blockchain.events.Creation;
+import org.blockchain.events.Event;
 import org.junit.jupiter.api.Test;
 
 import java.security.InvalidKeyException;

@@ -1,7 +1,7 @@
-package org.actors;
+package org.blockchain.actors;
 
-import org.events.Creation;
-import org.events.Transaction;
+import org.blockchain.events.Creation;
+import org.blockchain.events.Transaction;
 import org.junit.Test;
 
 import java.security.InvalidKeyException;
