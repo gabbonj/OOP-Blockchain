@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class Blockchain {
     final float blockPerEra = 200f;
-    final float rewardFirstera = 50f;
+    final float rewardFirstEra = 50f;
     final float halvingFactor = 2f;
     private final int max_block_events = 15;
     int next_zeros;
@@ -25,8 +25,8 @@ public class Blockchain {
     public Blockchain() {
         RandomGenerator generator = RandomGenerator.getDefault();
         next_zeros = generator.nextInt(2, 6);
-        blocks = new LinkedList<Block>();
-        pending = new ArrayList<Event>();
+        blocks = new LinkedList<>();
+        pending = new ArrayList<>();
         updated = new Date();
     }
 
@@ -43,8 +43,8 @@ public class Blockchain {
         Set<Wallet> wallets = new HashSet<>();
         for (Block block : blockchain.getBlocks()) {
             for (Event e : block.getEvents()) {
-                if (e instanceof Creation) {
-                    wallets.add(((Creation) e).getCreated());
+                if (e instanceof Creation creation) {
+                    wallets.add((creation.getCreated()));
                 }
             }
         }
@@ -100,7 +100,7 @@ public class Blockchain {
 
     @Override
     public int hashCode() {
-        return Objects.hash(blockPerEra, rewardFirstera, halvingFactor, getMax_block_events(), getNext_zeros(), getBlocks(), getPending(), getUpdated());
+        return Objects.hash(blockPerEra, rewardFirstEra, halvingFactor, getMax_block_events(), getNext_zeros(), getBlocks(), getPending(), getUpdated());
     }
 
     @Override
@@ -122,6 +122,9 @@ public class Blockchain {
     }
 
     public boolean addBlock(Block block) {
+        if (block.getEvents().size() > getMax_block_events()) {
+            return false;
+        }
         for (Event event : block.getEvents()) {
             if (!getPending().contains(event)) {
                 return false;
@@ -145,8 +148,8 @@ public class Blockchain {
     }
 
     public boolean addPending(Event event) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
-        if (event instanceof Transaction) {
-            if (!((Transaction) event).verify()) {
+        if (event instanceof Transaction transaction) {
+            if (!transaction.verify()) {
                 return false;
             }
         }
@@ -156,13 +159,18 @@ public class Blockchain {
     }
 
     private float reward(int blockIndex) {
-        return (float) (rewardFirstera / Math.pow(halvingFactor, Math.floor(blockIndex / blockPerEra)));
+        return (float) (rewardFirstEra / Math.pow(halvingFactor, Math.floor(blockIndex / blockPerEra)));
     }
 
-    private void updateBalance(Map<Wallet, Float> balances, Wallet key, Float change) {
+    private static void updateBalance(Map<Wallet, Float> balances, Wallet key, Float change) {
         if (balances.containsKey(key)) {
             balances.put(key, balances.get(key) + change);
         }
+    }
+
+    private static void updateBalanceTransaction(Map<Wallet, Float> balances, Transaction transaction) {
+        updateBalance(balances, transaction.getFrom(), -transaction.getAmount());
+        updateBalance(balances, transaction.getTo(), transaction.getAmount());
     }
 
     public Map<Wallet, Float> balances() {
@@ -172,8 +180,7 @@ public class Blockchain {
             updateBalance(balances, block.getMiner(), reward(index));
             for (Event event : block.getEvents()) {
                 if (event instanceof Transaction transaction && transaction.getAmount() <= balances.get(transaction.getFrom())) {
-                    updateBalance(balances, transaction.getFrom(), -transaction.getAmount());
-                    updateBalance(balances, transaction.getTo(), transaction.getAmount());
+                    updateBalanceTransaction(balances, transaction);
                 }
             }
             index++;

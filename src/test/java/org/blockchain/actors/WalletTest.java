@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class WalletTest {
     public static Wallet createWallet() {
-        Wallet w = null;
+        Wallet w;
         try {
             w = new Wallet();
         } catch (NoSuchAlgorithmException | NoSuchProviderException e) {

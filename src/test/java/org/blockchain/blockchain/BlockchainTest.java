@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class BlockchainTest {
     static public Blockchain createBlockChain() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
-        Blockchain blockchain = null;
+        Blockchain blockchain;
         blockchain = new Blockchain();
         assertNotNull(blockchain);
 
@@ -60,8 +60,17 @@ public class BlockchainTest {
     }
 
     @Test
+    public void verify() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        Blockchain blockchain = createBlockChain();
+        assertTrue(blockchain.verify());
+
+        blockchain.getBlocks().getFirst().getEvents().removeFirst();
+        assertFalse(blockchain.verify());
+    }
+
+    @Test
     public void addBlock() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
-        Blockchain blockchain = null;
+        Blockchain blockchain;
         blockchain = new Blockchain();
         assertNotNull(blockchain);
 
@@ -101,10 +110,10 @@ public class BlockchainTest {
         core.addMinedBlock(mined);
         core.updateWallets();
         Map<Wallet, Float> balance = core.getBlockchain().balances();
-        float balace1 = core.getBlockchain().walletBalance(wallet1);
-        float balace2 = core.getBlockchain().walletBalance(wallet2);
+        float balance1 = core.getBlockchain().walletBalance(wallet1);
+        float balance2 = core.getBlockchain().walletBalance(wallet2);
         assertEquals(0, core.getBlockchain().getPending().size());
-        assertEquals(20, balace1);
-        assertEquals(30, balace2);
+        assertEquals(20, balance1);
+        assertEquals(30, balance2);
     }
 }

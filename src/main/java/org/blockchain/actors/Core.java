@@ -4,16 +4,17 @@ import org.blockchain.blockchain.Block;
 import org.blockchain.blockchain.Blockchain;
 import org.blockchain.events.Event;
 
+import java.lang.reflect.Array;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
 
 public class Core {
     private Blockchain blockchain;
     private Set<Wallet> wallets;
-
     public Core(Blockchain blockchain) {
         this.blockchain = blockchain;
         wallets = blockchain.activeWallets();

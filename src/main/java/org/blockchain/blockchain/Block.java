@@ -29,9 +29,9 @@ public class Block {
 
     public static boolean verifyBlockTransactions(Block block) {
         for (Event e : block.getEvents()) {
-            if (e instanceof Transaction) {
+            if (e instanceof Transaction transaction) {
                 try {
-                    if (!((Transaction) e).verify()) {
+                    if (!transaction.verify()) {
                         return false;
                     }
                 } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException ex) {
