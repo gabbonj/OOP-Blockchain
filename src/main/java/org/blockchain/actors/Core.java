@@ -51,6 +51,9 @@ public class Core {
     }
 
     public boolean checkTrust() {
+        if (!getBlockchain().verify()) {
+            return false;
+        }
         updateWallets();
         int trust = 0;
         for (Wallet wallet : wallets) {
@@ -88,7 +91,10 @@ public class Core {
     public void pullMostTrusted() {
         updateWallets();
         if (!checkTrust()) {
-            setBlockchain(mostTrusted());
+            Blockchain newBlockchain = mostTrusted();
+            if (blockchain.verify()) {
+                setBlockchain(mostTrusted());
+            }
         }
     }
 }

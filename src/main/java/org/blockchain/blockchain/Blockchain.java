@@ -122,6 +122,9 @@ public class Blockchain {
     }
 
     public boolean addBlock(Block block) {
+        if (!verify()) {
+            return false;
+        }
         if (block.getEvents().size() > getMax_block_events()) {
             return false;
         }
