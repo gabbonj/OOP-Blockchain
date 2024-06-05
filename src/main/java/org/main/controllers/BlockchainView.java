@@ -19,6 +19,7 @@ import java.security.NoSuchProviderException;
 import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class BlockchainView {
@@ -43,6 +44,13 @@ public class BlockchainView {
     private TextField AmountFileld;
     @FXML
     private Button SendButton;
+    @FXML
+    private TextField EventNumberFiled;
+    @FXML
+    private Button SimulateNoMineButton;
+    @FXML
+    private Button SimulateMineButton;
+
 
     private void createGenesis() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, NoSuchProviderException {
         Blockchain blockchain = new Blockchain();
@@ -117,6 +125,17 @@ public class BlockchainView {
         update();
     }
 
+    private int getEventNumber() {
+        int number;
+        try {
+            number = Integer.parseInt(EventNumberFiled.getText());
+        } catch (NumberFormatException e) {
+            number = 0;
+        }
+
+        return number;
+    }
+
     public void initialize() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, NoSuchProviderException {
         CreateWalletButton.setOnAction(actionEvent -> {
             try {
@@ -167,9 +186,36 @@ public class BlockchainView {
                     throw new RuntimeException(e);
                 }
             }
-
             update();
         });
+
+
+        SimulateNoMineButton.setOnAction(actionEvent1 -> {
+            int events = getEventNumber();
+            Random random = new Random();
+
+            for (int i = 0; i < events; i++) {
+                ArrayList<Wallet> wallets = new ArrayList<>(core.getWallets());
+                Wallet wallet1;
+                Wallet wallet2;
+                do {
+                    wallet1 = wallets.get(random.nextInt(wallets.size()));
+                    wallet2 = wallets.get(random.nextInt(wallets.size()));
+                } while (wallet1.equals(wallet2) || core.getBlockchain().walletBalance(wallet1) == 0);
+
+                Transaction transaction;
+                try {
+                    transaction = wallet1.createTransaction(wallet2, random.nextFloat(core.getBlockchain().walletBalance(wallet1)));
+                    core.addPending(transaction);
+                    core.updateWallets();
+                } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            update();
+        });
+
+
         createGenesis();
         update();
     }

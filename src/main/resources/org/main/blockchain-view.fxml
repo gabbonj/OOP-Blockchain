@@ -43,18 +43,17 @@
                   <Font size="10.0" />
                </font>
             </Button>
-            <Button layoutX="11.0" layoutY="109.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="159.0" text="Simulate one (no mining)" />
+            <Button fx:id="SimulateNoMineButton" layoutX="10.0" layoutY="146.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="159.0" text="Simulate (no mining)" />
             <Separator layoutX="-3.0" layoutY="97.0" prefHeight="1.0" prefWidth="185.0" />
-            <Button layoutX="10.0" layoutY="196.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="159.0" text="Simulate (mining)" />
-            <Separator layoutX="-3.0" layoutY="147.0" prefHeight="1.0" prefWidth="185.0" />
-            <TextField layoutX="10.0" layoutY="166.0" prefHeight="26.0" prefWidth="70.0" text="10" />
-            <Text layoutX="12.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event number:" wrappingWidth="55.99596405029297">
+            <Button fx:id="SimulateMineButton" layoutX="10.0" layoutY="176.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="159.0" text="Simulate (mining)" />
+            <TextField fx:id="EventNumberFiled" layoutX="10.0" layoutY="116.0" prefHeight="26.0" prefWidth="70.0" text="10" />
+            <Text layoutX="12.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Event number:" wrappingWidth="55.99596405029297">
                <font>
                   <Font name="Adelle Sans Devanagari Light" size="8.0" />
                </font>
             </Text>
-            <Button fx:id="UpdateButton" layoutX="59.0" layoutY="265.0" mnemonicParsing="false" text="Update" />
-            <Separator layoutX="-3.0" layoutY="237.0" prefHeight="1.0" prefWidth="185.0" />
+            <Button fx:id="UpdateButton" layoutX="61.0" layoutY="248.0" mnemonicParsing="false" text="Update" />
+            <Separator layoutX="-3.0" layoutY="207.0" prefHeight="1.0" prefWidth="185.0" />
          </children>
       </Pane>
       <Text layoutX="24.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Actions" wrappingWidth="160.0" />
