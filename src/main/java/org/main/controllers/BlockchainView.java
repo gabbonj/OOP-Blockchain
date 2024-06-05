@@ -197,34 +197,57 @@ public class BlockchainView {
         }
     }
 
+    private Wallet getRandomWallet() {
+        Random random = new Random();
+        ArrayList<Wallet> wallets = new ArrayList<>(core.getWallets());
+        return wallets.get(random.nextInt(wallets.size()));
+    }
+
+    private void randomTransactions() {
+        int events = getEventNumber();
+        Random random = new Random();
+
+        for (int i = 0; i < events; i++) {
+            Wallet wallet1;
+            Wallet wallet2;
+            do {
+                wallet1 = getRandomWallet();
+                wallet2 = getRandomWallet();
+            } while (wallet1.equals(wallet2) || core.getBlockchain().walletBalance(wallet1) == 0);
+
+            Transaction transaction;
+            try {
+                transaction = wallet1.createTransaction(wallet2, random.nextFloat(core.getBlockchain().walletBalance(wallet1)));
+                core.addPending(transaction);
+                core.updateWallets();
+            } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     private class SimulateNoMineButtonHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent actionEvent) {
-            int events = getEventNumber();
-            Random random = new Random();
-
-            for (int i = 0; i < events; i++) {
-                ArrayList<Wallet> wallets = new ArrayList<>(core.getWallets());
-                Wallet wallet1;
-                Wallet wallet2;
-                do {
-                    wallet1 = wallets.get(random.nextInt(wallets.size()));
-                    wallet2 = wallets.get(random.nextInt(wallets.size()));
-                } while (wallet1.equals(wallet2) || core.getBlockchain().walletBalance(wallet1) == 0);
-
-                Transaction transaction;
-                try {
-                    transaction = wallet1.createTransaction(wallet2, random.nextFloat(core.getBlockchain().walletBalance(wallet1)));
-                    core.addPending(transaction);
-                    core.updateWallets();
-                } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            randomTransactions();
             update();
         }
     }
 
+    private class SimulateMineButtonHandler implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent actionEvent) {
+            randomTransactions();
+            while (!core.getBlockchain().getPending().isEmpty()) {
+                Wallet wallet = getRandomWallet();
+                wallet.pullFromCore(core);
+                wallet.mineOnBlockchain();
+                core.addMinedBlock(wallet.getPersonalBlockchain().getBlocks().getLast());
+                update();
+            }
+            update();
+        }
+    }
 
     public void initialize() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, NoSuchProviderException {
         CreateWalletButton.setOnAction(new CreateWalletButtonHandler());
@@ -232,7 +255,7 @@ public class BlockchainView {
         MineButton.setOnAction(new MineButtonHandler());
         SendButton.setOnAction(new SendButtonHandler());
         SimulateNoMineButton.setOnAction(new SimulateNoMineButtonHandler());
-
+        SimulateMineButton.setOnAction(new SimulateMineButtonHandler());
 
         createGenesis();
         update();
