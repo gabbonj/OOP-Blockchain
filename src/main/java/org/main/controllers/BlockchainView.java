@@ -27,6 +27,8 @@ public class BlockchainView {
     private Button CreateWalletButton;
     @FXML
     private ListView<String> PendingList;
+    @FXML
+    private Button UpdateButton;
 
     private void createGenesis() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, NoSuchProviderException {
         blockchain = new Blockchain();
@@ -84,6 +86,8 @@ public class BlockchainView {
                 throw new RuntimeException(e);
             }
         });
+
+        UpdateButton.setOnAction(actionEvent -> update());
 
         createGenesis();
         update();
