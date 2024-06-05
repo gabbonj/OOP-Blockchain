@@ -27,6 +27,13 @@ public class Creation extends Event {
     }
 
     @Override
+    public String toString() {
+        return "Creation{" +
+                "created=" + created.toString() +
+                '}';
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), getCreated());
     }
