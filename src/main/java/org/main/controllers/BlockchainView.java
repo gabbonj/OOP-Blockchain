@@ -45,7 +45,7 @@ public class BlockchainView {
         WalletsList.setItems(FXCollections.observableArrayList(
                 blockchain.activeWallets().stream()
                         .filter(Objects::nonNull)
-                        .map(w -> String.valueOf(w.getPublicKey().hashCode()))
+                        .map(Wallet::toString)
                         .collect(Collectors.toList())
         ));
     }

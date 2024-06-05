@@ -95,4 +95,9 @@ public class Wallet {
         Block block = mine();
         return personalBlockchain.addBlock(block);
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(getPublicKey().hashCode());
+    }
 }
