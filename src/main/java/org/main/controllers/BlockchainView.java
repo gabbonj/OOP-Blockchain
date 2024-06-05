@@ -19,7 +19,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class BlockchainView {
-    public Blockchain blockchain;
+    private Blockchain blockchain;
+    private Wallet myWallet;
 
     @FXML
     private ListView<String> WalletsList;
@@ -31,16 +32,18 @@ public class BlockchainView {
     private Button UpdateButton;
     @FXML
     private ListView<String>BlocksList;
+    @FXML
+    private Button MineButton;
 
     private void createGenesis() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, NoSuchProviderException {
         blockchain = new Blockchain();
 
-        Wallet w1 = new Wallet();
-        Creation c=  new Creation(w1);
+        myWallet = new Wallet();
+        Creation c =  new Creation(myWallet);
         ArrayList<Event> e = new ArrayList<>() {{
             add(c);
         }};
-        Block genesis = new Block(0, blockchain.getNext_zeros(), e, w1);
+        Block genesis = new Block(0, blockchain.getNext_zeros(), e, myWallet);
         for (Event event : genesis.getEvents()) {
             blockchain.addPending(event);
         }
@@ -54,7 +57,13 @@ public class BlockchainView {
         WalletsList.setItems(FXCollections.observableArrayList(
                 blockchain.activeWallets().stream()
                         .filter(Objects::nonNull)
-                        .map(Wallet::toString)
+                        .map(wallet -> {
+                            if (wallet == myWallet) {
+                                return "{ " + wallet.toString() + " }";
+                            } else {
+                                return wallet.toString();
+                            }
+                        })
                         .collect(Collectors.toList())
         ));
     }
@@ -100,6 +109,10 @@ public class BlockchainView {
         });
 
         UpdateButton.setOnAction(actionEvent -> update());
+
+        MineButton.setOnAction(actionEvent -> {
+
+        });
 
         createGenesis();
         update();
