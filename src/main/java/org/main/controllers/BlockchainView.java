@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import org.blockchain.actors.Core;
 import org.blockchain.actors.Wallet;
 import org.blockchain.blockchain.Block;
 import org.blockchain.blockchain.Blockchain;
@@ -19,7 +20,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class BlockchainView {
-    private Blockchain blockchain;
+    private Core core;
     private Wallet myWallet;
 
     @FXML
@@ -36,7 +37,7 @@ public class BlockchainView {
     private Button MineButton;
 
     private void createGenesis() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, NoSuchProviderException {
-        blockchain = new Blockchain();
+        Blockchain blockchain = new Blockchain();
 
         myWallet = new Wallet();
         Creation c =  new Creation(myWallet);
@@ -51,11 +52,13 @@ public class BlockchainView {
             genesis.setNonce(genesis.getNonce() + 1);
         }
         blockchain.addBlock(genesis);
+
+        core = new Core(blockchain);
     }
 
     private void updateWallets() {
         WalletsList.setItems(FXCollections.observableArrayList(
-                blockchain.activeWallets().stream()
+                core.getBlockchain().activeWallets().stream()
                         .filter(Objects::nonNull)
                         .map(wallet -> {
                             if (wallet == myWallet) {
@@ -70,7 +73,7 @@ public class BlockchainView {
 
     private void updatePending() {
         PendingList.setItems(FXCollections.observableArrayList(
-                blockchain.getPending().stream()
+                core.getBlockchain().getPending().stream()
                         .filter(Objects::nonNull)
                         .map(Event::toString)
                         .collect(Collectors.toList())
@@ -79,7 +82,7 @@ public class BlockchainView {
 
     private void updadateBlocks() {
         BlocksList.setItems(FXCollections.observableArrayList(
-            blockchain.getBlocks().stream()
+            core.getBlockchain().getBlocks().stream()
                     .filter(Objects::nonNull)
                     .map(Block::toString)
                     .collect(Collectors.toList())
@@ -95,7 +98,7 @@ public class BlockchainView {
     private void createWallet() throws NoSuchAlgorithmException, NoSuchProviderException, SignatureException, InvalidKeyException {
         Wallet w = new Wallet();
         Creation c = new Creation(w);
-        blockchain.addPending(c);
+        core.addPending(c);
         update();
     }
 
