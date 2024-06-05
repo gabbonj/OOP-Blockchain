@@ -1,5 +1,11 @@
 package org.main;
 
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import org.blockchain.actors.Wallet;
 import org.blockchain.events.Transaction;
 
@@ -7,11 +13,19 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SignatureException;
+import java.util.Objects;
 
-public class Main {
-    public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchProviderException, SignatureException, InvalidKeyException {
-        Wallet pino = new Wallet();
-        Wallet giovanni = new Wallet();
-        Transaction t = pino.createTransaction(giovanni, 10);
+public class Main extends Application {
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        Parent view = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("blockchain-view.fxml")));
+        Scene scene = new Scene(view);
+        stage.setTitle("Blockchain");
+        stage.setScene(scene);
+        stage.show();
     }
 }
