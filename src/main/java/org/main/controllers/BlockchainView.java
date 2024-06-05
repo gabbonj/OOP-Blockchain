@@ -114,9 +114,13 @@ public class BlockchainView {
         UpdateButton.setOnAction(actionEvent -> update());
 
         MineButton.setOnAction(actionEvent -> {
-
+            if (!core.getBlockchain().getPending().isEmpty()) {
+                myWallet.pullFromCore(core);
+                myWallet.mineOnBlockchain();
+                core.addMinedBlock(myWallet.getPersonalBlockchain().getBlocks().getLast());
+                update();
+            }
         });
-
         createGenesis();
         update();
     }
