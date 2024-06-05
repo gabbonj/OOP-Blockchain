@@ -1,6 +1,8 @@
 package org.main.controllers;
 
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -136,27 +138,32 @@ public class BlockchainView {
         return number;
     }
 
-    public void initialize() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, NoSuchProviderException {
-        CreateWalletButton.setOnAction(actionEvent -> {
+    private class CreateWalletButtonHandler implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent actionEvent) {
             try {
                 createWallet();
             } catch (NoSuchAlgorithmException | NoSuchProviderException | SignatureException | InvalidKeyException e) {
                 throw new RuntimeException(e);
             }
-        });
+        }
+    }
 
-        UpdateButton.setOnAction(actionEvent -> update());
-
-        MineButton.setOnAction(actionEvent -> {
+    private class MineButtonHandler implements  EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent actionEvent) {
             if (!core.getBlockchain().getPending().isEmpty()) {
                 myWallet.pullFromCore(core);
                 myWallet.mineOnBlockchain();
                 core.addMinedBlock(myWallet.getPersonalBlockchain().getBlocks().getLast());
                 update();
             }
-        });
+        }
+    }
 
-        SendButton.setOnAction(actionEvent -> {
+    private class SendButtonHandler implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent actionEvent) {
             Wallet to = null;
             for (Wallet wallet : core.getWallets()) {
                 if (Objects.equals(wallet.toString(), ToField.getText())) {
@@ -187,10 +194,12 @@ public class BlockchainView {
                 }
             }
             update();
-        });
+        }
+    }
 
-
-        SimulateNoMineButton.setOnAction(actionEvent1 -> {
+    private class SimulateNoMineButtonHandler implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent actionEvent) {
             int events = getEventNumber();
             Random random = new Random();
 
@@ -213,7 +222,16 @@ public class BlockchainView {
                 }
             }
             update();
-        });
+        }
+    }
+
+
+    public void initialize() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, NoSuchProviderException {
+        CreateWalletButton.setOnAction(new CreateWalletButtonHandler());
+        UpdateButton.setOnAction(actionEvent -> update());
+        MineButton.setOnAction(new MineButtonHandler());
+        SendButton.setOnAction(new SendButtonHandler());
+        SimulateNoMineButton.setOnAction(new SimulateNoMineButtonHandler());
 
 
         createGenesis();
