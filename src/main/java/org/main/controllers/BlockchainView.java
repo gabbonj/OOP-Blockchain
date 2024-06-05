@@ -56,17 +56,24 @@ public class BlockchainView {
         core = new Core(blockchain);
     }
 
+    private String walletFormat(Wallet wallet) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (wallet == myWallet) {
+            stringBuilder.append("{ ").append(wallet.toString()).append(" }");
+        } else {
+            stringBuilder.append(wallet.toString());
+        }
+        stringBuilder.append(" - ").append(core.getBlockchain().walletBalance(wallet));
+
+        return stringBuilder.toString();
+    }
+
     private void updateWallets() {
         WalletsList.setItems(FXCollections.observableArrayList(
                 core.getBlockchain().activeWallets().stream()
                         .filter(Objects::nonNull)
-                        .map(wallet -> {
-                            if (wallet == myWallet) {
-                                return "{ " + wallet.toString() + " }";
-                            } else {
-                                return wallet.toString();
-                            }
-                        })
+                        .map(this::walletFormat)
                         .collect(Collectors.toList())
         ));
     }
