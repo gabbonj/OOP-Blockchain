@@ -95,6 +95,16 @@ public class Block {
         return verifyBlockTransactions(this);
     }
 
+    @Override
+    public String toString() {
+        return "Block{" +
+                "zeros=" + zeros +
+                ", events=" + events +
+                ", miner=" + miner +
+                ", nonce=" + nonce +
+                '}';
+    }
+
     public boolean verify() {
         return verifyBlock(this);
     }

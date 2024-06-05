@@ -29,6 +29,8 @@ public class BlockchainView {
     private ListView<String> PendingList;
     @FXML
     private Button UpdateButton;
+    @FXML
+    private ListView<String>BlocksList;
 
     private void createGenesis() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, NoSuchProviderException {
         blockchain = new Blockchain();
@@ -66,9 +68,19 @@ public class BlockchainView {
         ));
     }
 
+    private void updadateBlocks() {
+        BlocksList.setItems(FXCollections.observableArrayList(
+            blockchain.getBlocks().stream()
+                    .filter(Objects::nonNull)
+                    .map(Block::toString)
+                    .collect(Collectors.toList())
+        ));
+    }
+
     private void update() {
         updateWallets();
         updatePending();
+        updadateBlocks();
     }
 
     private void createWallet() throws NoSuchAlgorithmException, NoSuchProviderException, SignatureException, InvalidKeyException {

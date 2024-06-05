@@ -28,9 +28,7 @@ public class Creation extends Event {
 
     @Override
     public String toString() {
-        return "Creation{" +
-                "created=" + created.toString() +
-                '}';
+        return "Creation{"  + created.toString() + '}';
     }
 
     @Override
