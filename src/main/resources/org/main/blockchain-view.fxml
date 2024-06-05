@@ -26,8 +26,8 @@
                   <Font name="Adelle Sans Devanagari Light" size="10.0" />
                </font>
             </Text>
-            <TextField layoutX="10.0" layoutY="36.0" prefHeight="26.0" prefWidth="70.0" />
-            <TextField layoutX="97.0" layoutY="36.0" prefHeight="26.0" prefWidth="70.0" />
+            <TextField fx:id="ToField" layoutX="10.0" layoutY="36.0" prefHeight="26.0" prefWidth="70.0" />
+            <TextField fx:id="AmountFileld" layoutX="97.0" layoutY="36.0" prefHeight="26.0" prefWidth="70.0" />
             <Text layoutX="12.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To:" wrappingWidth="55.99596405029297">
                <font>
                   <Font name="Adelle Sans Devanagari Light" size="8.0" />
@@ -38,7 +38,7 @@
                   <Font name="Adelle Sans Devanagari Light" size="8.0" />
                </font>
             </Text>
-            <Button layoutX="12.0" layoutY="67.0" mnemonicParsing="false" text="Send">
+            <Button fx:id="SendButton" layoutX="12.0" layoutY="67.0" mnemonicParsing="false" text="Send">
                <font>
                   <Font size="10.0" />
                </font>

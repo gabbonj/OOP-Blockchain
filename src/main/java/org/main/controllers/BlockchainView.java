@@ -4,12 +4,14 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import org.blockchain.actors.Core;
 import org.blockchain.actors.Wallet;
 import org.blockchain.blockchain.Block;
 import org.blockchain.blockchain.Blockchain;
 import org.blockchain.events.Creation;
 import org.blockchain.events.Event;
+import org.blockchain.events.Transaction;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -35,6 +37,12 @@ public class BlockchainView {
     private ListView<String>BlocksList;
     @FXML
     private Button MineButton;
+    @FXML
+    private TextField ToField;
+    @FXML
+    private TextField AmountFileld;
+    @FXML
+    private Button SendButton;
 
     private void createGenesis() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, NoSuchProviderException {
         Blockchain blockchain = new Blockchain();
@@ -127,6 +135,40 @@ public class BlockchainView {
                 core.addMinedBlock(myWallet.getPersonalBlockchain().getBlocks().getLast());
                 update();
             }
+        });
+
+        SendButton.setOnAction(actionEvent -> {
+            Wallet to = null;
+            for (Wallet wallet : core.getWallets()) {
+                if (Objects.equals(wallet.toString(), ToField.getText())) {
+                    to = wallet;
+                    break;
+                }
+            }
+
+            if (to == null || AmountFileld.getText().isEmpty()) {
+                return;
+            }
+
+            float amount;
+            try {
+                amount = Float.parseFloat(AmountFileld.getText());
+            } catch (NumberFormatException e) {
+                return;
+            }
+
+            Transaction t;
+            if (amount < core.getBlockchain().walletBalance(myWallet)) {
+                try {
+                    t = myWallet.createTransaction(to, amount);
+                    core.addPending(t);
+                    core.updateWallets();
+                } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            update();
         });
         createGenesis();
         update();
