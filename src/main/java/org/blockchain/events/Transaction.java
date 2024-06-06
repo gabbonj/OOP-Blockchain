@@ -17,6 +17,15 @@ public class Transaction extends Event {
     private final byte[] signture;
     private final Wallet from;
 
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "from=" + from +
+                ", to=" + to +
+                ", amount=" + amount +
+                '}';
+    }
+
     public Transaction(Wallet from, Wallet to, float amount, byte[] signature) throws InvalidKeyException, NoSuchAlgorithmException, SignatureException {
         super();
         if (!verifyTransaction(from, to, amount, signature)) {
