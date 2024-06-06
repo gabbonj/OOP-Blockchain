@@ -101,11 +101,11 @@ public class Block {
             stringBuilder.append("\t\t").append(event.toString()).append('\n');
         }
         return stringBuilder.toString();
-    };
+    }
 
     @Override
     public String toString() {
-        String stringBuilder = "Block {\n\t" +
+        return "Block {\n\t" +
                 "zeros=" + zeros +
                 ",\n\t nonce=" + nonce +
                 ",\n\t hash=" + hashCode() +
@@ -114,7 +114,6 @@ public class Block {
                 "\t]," +
                 "\n\t miner=" + miner +
                 "\n}";
-        return stringBuilder;
     }
 
     public boolean verify() {
