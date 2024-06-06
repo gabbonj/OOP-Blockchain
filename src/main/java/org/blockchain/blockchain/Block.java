@@ -95,15 +95,26 @@ public class Block {
         return verifyBlockTransactions(this);
     }
 
+    private String formattingEvents() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Event event : events) {
+            stringBuilder.append("\t\t").append(event.toString()).append('\n');
+        }
+        return stringBuilder.toString();
+    };
+
     @Override
     public String toString() {
-        return "Block {\n\t" +
+        String stringBuilder = "Block {\n\t" +
                 "zeros=" + zeros +
                 ",\n\t nonce=" + nonce +
-                ",\n\t hash=" +  hashCode()+
-                ",\n\t events=" + events +
-                ",\n\t miner=" + miner +
+                ",\n\t hash=" + hashCode() +
+                ",\n\t events= [\n" +
+                formattingEvents() +
+                "\t]," +
+                "\n\t miner=" + miner +
                 "\n}";
+        return stringBuilder;
     }
 
     public boolean verify() {
