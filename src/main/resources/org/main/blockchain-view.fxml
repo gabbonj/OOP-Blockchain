@@ -27,7 +27,7 @@
                </font>
             </Text>
             <TextField fx:id="ToField" layoutX="10.0" layoutY="36.0" prefHeight="26.0" prefWidth="70.0" />
-            <TextField fx:id="AmountFileld" layoutX="97.0" layoutY="36.0" prefHeight="26.0" prefWidth="70.0" />
+            <TextField fx:id="AmountField" layoutX="97.0" layoutY="36.0" prefHeight="26.0" prefWidth="70.0" />
             <Text layoutX="12.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To:" wrappingWidth="55.99596405029297">
                <font>
                   <Font name="Adelle Sans Devanagari Light" size="8.0" />

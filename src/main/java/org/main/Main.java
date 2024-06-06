@@ -25,6 +25,7 @@ public class Main extends Application {
         Parent view = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("blockchain-view.fxml")));
         Scene scene = new Scene(view);
         stage.setTitle("Blockchain");
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }

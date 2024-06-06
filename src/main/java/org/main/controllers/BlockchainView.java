@@ -43,7 +43,7 @@ public class BlockchainView {
     @FXML
     private TextField ToField;
     @FXML
-    private TextField AmountFileld;
+    private TextField AmountField;
     @FXML
     private Button SendButton;
     @FXML
@@ -107,10 +107,10 @@ public class BlockchainView {
 
     private void updadateBlocks() {
         BlocksList.setItems(FXCollections.observableArrayList(
-            core.getBlockchain().getBlocks().stream()
-                    .filter(Objects::nonNull)
-                    .map(Block::toString)
-                    .collect(Collectors.toList())
+                core.getBlockchain().getBlocks().stream()
+                        .filter(Objects::nonNull)
+                        .map(Block::toString)
+                        .collect(Collectors.toList())
         ));
     }
 
@@ -172,13 +172,13 @@ public class BlockchainView {
                 }
             }
 
-            if (to == null || AmountFileld.getText().isEmpty()) {
+            if (to == null || AmountField.getText().isEmpty()) {
                 return;
             }
 
             float amount;
             try {
-                amount = Float.parseFloat(AmountFileld.getText());
+                amount = Float.parseFloat(AmountField.getText());
             } catch (NumberFormatException e) {
                 return;
             }
