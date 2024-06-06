@@ -97,12 +97,13 @@ public class Block {
 
     @Override
     public String toString() {
-        return "Block{" +
+        return "Block {\n\t" +
                 "zeros=" + zeros +
-                ", events=" + events +
-                ", miner=" + miner +
-                ", nonce=" + nonce +
-                '}';
+                ",\n\t nonce=" + nonce +
+                ",\n\t hash=" +  hashCode()+
+                ",\n\t events=" + events +
+                ",\n\t miner=" + miner +
+                "\n}";
     }
 
     public boolean verify() {
