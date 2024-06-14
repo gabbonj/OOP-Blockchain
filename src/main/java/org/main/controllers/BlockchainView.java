@@ -264,6 +264,10 @@ public class BlockchainView {
         int events = getEventNumber();
         Random random = new Random();
 
+        if (core.getBlockchain().activeWallets().size() < 2) {
+            return;
+        }
+
         for (int i = 0; i < events; i++) {
             Wallet wallet1;
             Wallet wallet2;
