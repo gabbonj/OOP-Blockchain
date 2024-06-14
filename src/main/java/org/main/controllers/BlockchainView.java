@@ -1,9 +1,12 @@
 package org.main.controllers;
 
 import javafx.collections.FXCollections;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -52,6 +55,9 @@ public class BlockchainView {
     private Button SimulateNoMineButton;
     @FXML
     private Button SimulateMineButton;
+
+    private Service<Void> createWalleteService;
+    private boolean isCreteWalletServiceRunnig = false;
 
 
     private void createGenesis() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, NoSuchProviderException {
@@ -124,7 +130,6 @@ public class BlockchainView {
         Wallet w = new Wallet();
         Creation c = new Creation(w);
         core.addPending(c);
-        update();
     }
 
     private int getEventNumber() {
@@ -141,10 +146,46 @@ public class BlockchainView {
     private class CreateWalletButtonHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent actionEvent) {
-            try {
-                createWallet();
-            } catch (NoSuchAlgorithmException | NoSuchProviderException | SignatureException | InvalidKeyException e) {
-                throw new RuntimeException(e);
+            if (!isCreteWalletServiceRunnig) {
+                isCreteWalletServiceRunnig = true;
+                createWalleteService = new Service<>() {
+                    @Override
+                    protected Task<Void> createTask() {
+                        return new Task<>() {
+                            @Override
+                            protected Void call() {
+                                try {
+                                    createWallet();
+                                } catch (NoSuchAlgorithmException | NoSuchProviderException | SignatureException | InvalidKeyException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                return null;
+                            }
+
+                            @Override
+                            protected void succeeded() {
+                                super.succeeded();
+                                isCreteWalletServiceRunnig = false;
+                                update();
+                            }
+
+                            @Override
+                            protected void failed() {
+                                super.failed();
+                                isCreteWalletServiceRunnig = false;
+                                update();
+                            }
+
+                            @Override
+                            protected void cancelled() {
+                                super.cancelled();
+                                isCreteWalletServiceRunnig = false;
+                                update();
+                            }
+                        };
+                    }
+                };
+                createWalleteService.start();
             }
         }
     }
