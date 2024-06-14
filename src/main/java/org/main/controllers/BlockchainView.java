@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import org.blockchain.actors.Core;
@@ -54,6 +55,8 @@ public class BlockchainView {
     private Button SimulateNoMineButton;
     @FXML
     private Button SimulateMineButton;
+    @FXML
+    private Label RunningLabel;
 
     private Service<Void> createWalleteService;
     private boolean isServiceRunning = false;
@@ -150,6 +153,7 @@ public class BlockchainView {
         protected void succeeded() {
             super.succeeded();
             isServiceRunning = false;
+            RunningLabel.setText("");
             update();
         }
 
@@ -157,6 +161,7 @@ public class BlockchainView {
         protected void failed() {
             super.failed();
             isServiceRunning = false;
+            RunningLabel.setText("");
             update();
         }
 
@@ -164,6 +169,7 @@ public class BlockchainView {
         protected void cancelled() {
             super.cancelled();
             isServiceRunning = false;
+            RunningLabel.setText("");
             update();
         }
     }
@@ -189,6 +195,7 @@ public class BlockchainView {
         public void handle(ActionEvent actionEvent) {
             if (!isServiceRunning) {
                 isServiceRunning = true;
+                RunningLabel.setText("Running...");
                 createService().start();
             }
         }
@@ -316,6 +323,8 @@ public class BlockchainView {
         SendButton.setOnAction(new SendButtonHandler());
         SimulateNoMineButton.setOnAction(new SimulateNoMineButtonHandler());
         SimulateMineButton.setOnAction(new SimulateMineButtonHandler());
+
+        RunningLabel.setStyle("-fx-text-fill: red;");
 
         createGenesis();
         update();
