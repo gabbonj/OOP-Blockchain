@@ -168,29 +168,41 @@ public class BlockchainView {
         }
     }
 
-    private class CreateWalletButtonHandler implements EventHandler<ActionEvent> {
+    private abstract class ButtunHandler<V> implements EventHandler<ActionEvent> {
+        protected abstract V onClick();
+
+        protected Service<V> createService() {
+            return new Service<>() {
+                @Override
+                protected Task<V> createTask() {
+                    return new GuiTask<>() {
+                        @Override
+                        protected V call() {
+                            return onClick();
+                        }
+                    };
+                }
+            };
+        }
+
         @Override
         public void handle(ActionEvent actionEvent) {
             if (!isServiceRunning) {
                 isServiceRunning = true;
-                createWalleteService = new Service<>() {
-                    @Override
-                    protected Task<Void> createTask() {
-                        return new GuiTask<>() {
-                            @Override
-                            protected Void call() {
-                                try {
-                                    createWallet();
-                                } catch (NoSuchAlgorithmException | NoSuchProviderException | SignatureException | InvalidKeyException e) {
-                                    throw new RuntimeException(e);
-                                }
-                                return null;
-                            }
-                        };
-                    }
-                };
-                createWalleteService.start();
+                createService().start();
             }
+        }
+    }
+
+    private class CreateWalletButtonHandler extends ButtunHandler<Void> {
+        @Override
+        protected Void onClick() {
+            try {
+                createWallet();
+            } catch (NoSuchAlgorithmException | NoSuchProviderException | SignatureException | InvalidKeyException e) {
+                throw new RuntimeException(e);
+            }
+            return null;
         }
     }
 
