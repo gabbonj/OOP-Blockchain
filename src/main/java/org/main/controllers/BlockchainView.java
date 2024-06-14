@@ -168,7 +168,7 @@ public class BlockchainView {
         }
     }
 
-    private abstract class ButtunHandler<V> implements EventHandler<ActionEvent> {
+    private abstract class ButtonHandler<V> implements EventHandler<ActionEvent> {
         protected abstract V onClick();
 
         protected Service<V> createService() {
@@ -194,7 +194,7 @@ public class BlockchainView {
         }
     }
 
-    private class CreateWalletButtonHandler extends ButtunHandler<Void> {
+    private class CreateWalletButtonHandler extends ButtonHandler<Void> {
         @Override
         protected Void onClick() {
             try {
@@ -206,21 +206,21 @@ public class BlockchainView {
         }
     }
 
-    private class MineButtonHandler implements  EventHandler<ActionEvent> {
+    private class MineButtonHandler extends ButtonHandler<Void> {
         @Override
-        public void handle(ActionEvent actionEvent) {
+        public Void onClick() {
             if (!core.getBlockchain().getPending().isEmpty()) {
                 myWallet.pullFromCore(core);
                 myWallet.mineOnBlockchain();
                 core.addMinedBlock(myWallet.getPersonalBlockchain().getBlocks().getLast());
-                update();
             }
+            return null;
         }
     }
 
-    private class SendButtonHandler implements EventHandler<ActionEvent> {
+    private class SendButtonHandler extends ButtonHandler<Void> {
         @Override
-        public void handle(ActionEvent actionEvent) {
+        public Void onClick() {
             Wallet to = null;
             for (Wallet wallet : core.getWallets()) {
                 if (Objects.equals(wallet.toString(), ToField.getText())) {
@@ -230,14 +230,14 @@ public class BlockchainView {
             }
 
             if (to == null || AmountField.getText().isEmpty()) {
-                return;
+                return null;
             }
 
             float amount;
             try {
                 amount = Float.parseFloat(AmountField.getText());
             } catch (NumberFormatException e) {
-                return;
+                return null;
             }
 
             Transaction t;
@@ -250,7 +250,7 @@ public class BlockchainView {
                     throw new RuntimeException(e);
                 }
             }
-            update();
+            return null;
         }
     }
 
@@ -283,26 +283,25 @@ public class BlockchainView {
         }
     }
 
-    private class SimulateNoMineButtonHandler implements EventHandler<ActionEvent> {
+    private class SimulateNoMineButtonHandler extends ButtonHandler<Void> {
         @Override
-        public void handle(ActionEvent actionEvent) {
+        public Void onClick() {
             randomTransactions();
-            update();
+            return null;
         }
     }
 
-    private class SimulateMineButtonHandler implements EventHandler<ActionEvent> {
+    private class SimulateMineButtonHandler extends ButtonHandler<Void> {
         @Override
-        public void handle(ActionEvent actionEvent) {
+        public Void onClick() {
             randomTransactions();
             while (!core.getBlockchain().getPending().isEmpty()) {
                 Wallet wallet = getRandomWallet();
                 wallet.pullFromCore(core);
                 wallet.mineOnBlockchain();
                 core.addMinedBlock(wallet.getPersonalBlockchain().getBlocks().getLast());
-                update();
             }
-            update();
+            return null;
         }
     }
 
